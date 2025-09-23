@@ -1,5 +1,6 @@
 package ui;
 
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -79,7 +80,11 @@ public class AdminDashboard {
      */
     public void addRow(String subject, String priority, int ID) {
         JPanel row = new JPanel(new GridLayout(1, 4));
-        row.add(new JLabel(Integer.toString(slNo)));
+        row.setPreferredSize(new Dimension(0, 40));
+        row.setMinimumSize(new Dimension(0, 40));
+        row.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
+        row.setBorder(BorderFactory.createEmptyBorder(5, 15, 5, 5));
+        row.add(new JLabel(Integer.toString(slNo++)));
         row.add(new JLabel(subject));
         row.add(new JLabel(priority));
         row.add(new JLabel("ID" + Integer.toString(ID)));
