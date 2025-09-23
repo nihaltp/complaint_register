@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
@@ -16,6 +17,7 @@ import java.time.format.DateTimeFormatter;
 
 public class AdminDashboard {
     JPanel panel;
+    JPanel header;
     JPanel topPanel;
     JPanel leftPanel;
     JPanel rightPanel;
@@ -43,7 +45,7 @@ public class AdminDashboard {
         leftPanel.add(adminNameLabel);
         leftPanel.add(loginTimeLabel);
 
-        logoutButton = new JButton();
+        logoutButton = new JButton("LOGOUT");
 
         rightPanel = new JPanel(new FlowLayout());
         rightPanel.add(logoutButton);
@@ -57,18 +59,22 @@ public class AdminDashboard {
         tableHeader.add(new JLabel("Subject"));
         tableHeader.add(new JLabel("Priority"));
         tableHeader.add(new JLabel("ID"));
-
+        tableHeader.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
         tableBody = new JPanel();
         tableBody.setLayout(new BoxLayout(tableBody, BoxLayout.Y_AXIS));
 
         scrollPane = new JScrollPane(tableBody);
         scrollPane.setPreferredSize(new Dimension(480, 300));
 
+        header = new JPanel();
+        header.setLayout(new BorderLayout());
+        header.add(topPanel, BorderLayout.NORTH);
+        header.add(tableHeader, BorderLayout.SOUTH);
+
         panel = new JPanel();
         panel.setLayout(new BorderLayout());
-        panel.add(topPanel, BorderLayout.NORTH);
-        panel.add(tableHeader, BorderLayout.CENTER);
-        panel.add(scrollPane, BorderLayout.SOUTH);
+        panel.add(header, BorderLayout.NORTH);
+        panel.add(scrollPane, BorderLayout.CENTER);
     }
 
     /**
@@ -87,7 +93,8 @@ public class AdminDashboard {
         row.add(new JLabel(Integer.toString(slNo++)));
         row.add(new JLabel(subject));
         row.add(new JLabel(priority));
-        row.add(new JLabel("ID" + Integer.toString(ID)));
+        row.add(new JLabel("#" + Integer.toString(ID)));
+        row.setBorder(BorderFactory.createMatteBorder(1, 0, 1, 0, Color.BLACK));
         tableBody.add(row);
     }
 }
