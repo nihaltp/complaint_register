@@ -69,4 +69,20 @@ public class AdminDashboard {
         panel.add(tableHeader, BorderLayout.CENTER);
         panel.add(scrollPane, BorderLayout.SOUTH);
     }
+
+    /**
+     * Adds a row to the table body
+     * 
+     * @param subject  the subject of the complaint
+     * @param priority  the priority of the complaint
+     * @param ID  the ID of the complaint
+     */
+    public void addRow(String subject, String priority, int ID) {
+        JPanel row = new JPanel(new GridLayout(1, 4));
+        row.add(new JLabel(Integer.toString(slNo)));
+        row.add(new JLabel(subject));
+        row.add(new JLabel(priority));
+        row.add(new JLabel("ID" + Integer.toString(ID)));
+        tableBody.add(row);
+    }
 }
