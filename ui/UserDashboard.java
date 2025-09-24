@@ -1,30 +1,94 @@
 package ui;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridLayout;
+
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.border.EmptyBorder;
 
 public class UserDashboard {
-    JFrame frame;
-    JButton addComplaint;
-    JButton checkComplaints;
+    JPanel panel;
+    JPanel topPanel;
+    JPanel centerPanel;
+    JPanel tableHeader;
+    JPanel tableBody;
+    JPanel header;
 
-    public UserDashboard() {
-        frame = new JFrame();
-        frame.setTitle("Complaint Register");
-        frame.setSize(500,500);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLayout(new FlowLayout());
+    JScrollPane scrollPane;
+
+    JLabel userNameLabel;
+
+    JButton logoutButton;
+    JButton addComplaint;
+
+    int slNo = 1;
+
+    public UserDashboard(String username) {
+        userNameLabel = new JLabel(username);
+
+        logoutButton = new JButton("LOGOUT");
 
         addComplaint = new JButton();
         addComplaint.setText("Add a new Complaint");
+        addComplaint.setPreferredSize(new Dimension(60, 20));
+        addComplaint.setMaximumSize(new Dimension(60, 20));
 
-        checkComplaints = new JButton();
-        checkComplaints.setText("Check complaints");
+        topPanel = new JPanel(new BorderLayout());
+        topPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
+        topPanel.add(userNameLabel, BorderLayout.WEST);
+        topPanel.add(addComplaint);
+        topPanel.add(logoutButton, BorderLayout.EAST);
 
-        frame.add(addComplaint);
-        frame.add(checkComplaints);
+        tableHeader = new JPanel(new GridLayout(1, 4));
+        tableHeader.add(new JLabel("sl.no"));
+        tableHeader.add(new JLabel("Subject"));
+        tableHeader.add(new JLabel("Priority"));
+        tableHeader.add(new JLabel("ID"));
+        tableHeader.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
 
-        frame.setVisible(true);
-        frame.setResizable(false);
+        tableBody = new JPanel();
+        tableBody.setLayout(new BoxLayout(tableBody, BoxLayout.Y_AXIS));
+
+        scrollPane = new JScrollPane(tableBody);
+        scrollPane.setPreferredSize(new Dimension(480, 300));
+
+        header = new JPanel();
+        header.setLayout(new BorderLayout());
+        header.add(topPanel, BorderLayout.NORTH);
+        header.add(tableHeader, BorderLayout.SOUTH);
+
+        panel = new JPanel();
+        panel.setBorder(new EmptyBorder(5, 5, 5, 5));
+        panel.setLayout(new BorderLayout());
+        panel.add(header, BorderLayout.NORTH);
+        panel.add(scrollPane, BorderLayout.SOUTH);
+    }
+
+    /**
+     * Adds a row to the table body
+     * 
+     * @param subject  the subject of the complaint
+     * @param priority  the priority of the complaint
+     * @param ID  the ID of the complaint
+     */
+    public void addRow(String subject, String priority, int ID) {
+        JPanel row = new JPanel(new GridLayout(1, 4));
+        row.setPreferredSize(new Dimension(0, 40));
+        row.setMinimumSize(new Dimension(0, 40));
+        row.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
+        row.setBorder(BorderFactory.createEmptyBorder(5, 15, 5, 5));
+        row.add(new JLabel(Integer.toString(slNo++)));
+        row.add(new JLabel(subject));
+        row.add(new JLabel(priority));
+        row.add(new JLabel("#" + Integer.toString(ID)));
+        row.setBorder(BorderFactory.createMatteBorder(1, 0, 1, 0, Color.BLACK));
+        tableBody.add(row);
     }
 }
