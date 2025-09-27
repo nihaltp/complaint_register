@@ -1,30 +1,71 @@
 package ui;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridLayout;
+
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.border.EmptyBorder;
 
 public class UserDashboard {
-    JFrame frame;
-    JButton addComplaint;
-    JButton checkComplaints;
+    JPanel panel;
+    JPanel topPanel;
+    JPanel centerPanel;
+    JPanel tableHeader;
+    JPanel tableBody;
+    JPanel header;
 
-    public UserDashboard() {
-        frame = new JFrame();
-        frame.setTitle("Complaint Register");
-        frame.setSize(500,500);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLayout(new FlowLayout());
+    JScrollPane scrollPane;
+
+    JLabel userNameLabel;
+
+    JButton logoutButton;
+    JButton addComplaint;
+
+    public UserDashboard(String username) {
+        userNameLabel = new JLabel(username);
+
+        logoutButton = new JButton("LOGOUT");
 
         addComplaint = new JButton();
         addComplaint.setText("Add a new Complaint");
+        addComplaint.setPreferredSize(new Dimension(60, 20));
+        addComplaint.setMaximumSize(new Dimension(60, 20));
 
-        checkComplaints = new JButton();
-        checkComplaints.setText("Check complaints");
+        topPanel = new JPanel(new BorderLayout());
+        topPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
+        topPanel.add(userNameLabel, BorderLayout.WEST);
+        topPanel.add(addComplaint);
+        topPanel.add(logoutButton, BorderLayout.EAST);
 
-        frame.add(addComplaint);
-        frame.add(checkComplaints);
+        tableHeader = new JPanel(new GridLayout(1, 4));
+        tableHeader.add(new JLabel("sl.no"));
+        tableHeader.add(new JLabel("Subject"));
+        tableHeader.add(new JLabel("Priority"));
+        tableHeader.add(new JLabel("ID"));
+        tableHeader.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
 
-        frame.setVisible(true);
-        frame.setResizable(false);
+        tableBody = new JPanel();
+        tableBody.setLayout(new BoxLayout(tableBody, BoxLayout.Y_AXIS));
+
+        scrollPane = new JScrollPane(tableBody);
+        scrollPane.setPreferredSize(new Dimension(480, 300));
+
+        header = new JPanel();
+        header.setLayout(new BorderLayout());
+        header.add(topPanel, BorderLayout.NORTH);
+        header.add(tableHeader, BorderLayout.SOUTH);
+
+        panel = new JPanel();
+        panel.setBorder(new EmptyBorder(5, 5, 5, 5));
+        panel.setLayout(new BorderLayout());
+        panel.add(header, BorderLayout.NORTH);
+        panel.add(scrollPane, BorderLayout.SOUTH);
     }
 }
