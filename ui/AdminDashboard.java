@@ -32,8 +32,6 @@ public class AdminDashboard {
 
     JButton logoutButton;
 
-    int slNo = 1;
-
     public AdminDashboard() {
         adminNameLabel = new JLabel("admin");
 
@@ -75,26 +73,5 @@ public class AdminDashboard {
         panel.setLayout(new BorderLayout());
         panel.add(header, BorderLayout.NORTH);
         panel.add(scrollPane, BorderLayout.CENTER);
-    }
-
-    /**
-     * Adds a row to the table body
-     * 
-     * @param subject  the subject of the complaint
-     * @param priority  the priority of the complaint
-     * @param ID  the ID of the complaint
-     */
-    public void addRow(String subject, String priority, int ID) {
-        JPanel row = new JPanel(new GridLayout(1, 4));
-        row.setPreferredSize(new Dimension(0, 40));
-        row.setMinimumSize(new Dimension(0, 40));
-        row.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
-        row.setBorder(BorderFactory.createEmptyBorder(5, 15, 5, 5));
-        row.add(new JLabel(Integer.toString(slNo++)));
-        row.add(new JLabel(subject));
-        row.add(new JLabel(priority));
-        row.add(new JLabel("#" + Integer.toString(ID)));
-        row.setBorder(BorderFactory.createMatteBorder(1, 0, 1, 0, Color.BLACK));
-        tableBody.add(row);
     }
 }

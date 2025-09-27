@@ -4,10 +4,13 @@ import java.awt.CardLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import ui.helpers.RowHelper;
+
 public class UIUtils {
     JFrame frame;
     CardLayout cardLayout;
     JPanel panel;
+    JPanel tableBody;
 
     LoginUI loginUI;
     JPanel loginPanel;
@@ -38,12 +41,14 @@ public class UIUtils {
             if (username.equals("admin")) {
                 adminUI = new AdminDashboard();
                 adminPanel = adminUI.panel;
+                tableBody = adminUI.tableBody;
                 panel.add(adminPanel, "admin");
 
                 cardLayout.show(panel, "admin");
             } else {
                 userUI = new UserDashboard(username);
                 userPanel = userUI.panel;
+                tableBody = userUI.tableBody;
                 panel.add(userPanel, "user");
                 cardLayout.show(panel, "user");
             }
