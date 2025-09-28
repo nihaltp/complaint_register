@@ -27,11 +27,11 @@ public class ComplaintUI {
     JButton backButton;
 
     JLabel idLabel;
-    JLabel subjectLabel;
     JLabel complaintLabel;
     JLabel timeLabel;
     JLabel complainerLabel;
-
+    
+    JTextArea subjectArea;
     JTextArea descriptionArea;
 
     JScrollPane descScroll;
@@ -62,19 +62,26 @@ public class ComplaintUI {
         idPanel.add(idLabel, BorderLayout.WEST);
         idPanel.add(Box.createHorizontalGlue());
 
-        subjectLabel = new JLabel("Subject: " + subject);
-        subjectLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        subjectArea = new JTextArea();
+        subjectArea.setText("Subject: " + subject);
 
-        subjectPanel = new JPanel(new BorderLayout());
+        if (UIUtils.username.equals("admin")) {
+            subjectArea.setEditable(false);
+        }
+
+        subjectPanel = new JPanel();
         subjectPanel.setLayout(new BoxLayout(subjectPanel, BoxLayout.X_AXIS));
-        subjectPanel.add(subjectLabel, BorderLayout.WEST);
+        subjectPanel.add(subjectArea, BorderLayout.WEST);
         subjectPanel.add(Box.createHorizontalGlue());
 
         descriptionArea = new JTextArea(5, 30);
         descriptionArea.setText(description);
         descriptionArea.setLineWrap(true);
         descriptionArea.setWrapStyleWord(true);
-        descriptionArea.setEditable(false);
+
+        if (UIUtils.username.equals("admin")) {
+            descriptionArea.setEditable(false);
+        }
 
         descScroll = new JScrollPane(descriptionArea);
 

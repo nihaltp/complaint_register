@@ -21,7 +21,8 @@ public class UIUtils {
     UserDashboard userUI;
     JPanel userPanel;
 
-    // The constructor is where all the setup logic should go.
+    static String username;
+
     public UIUtils() {
         // 1. Initialize the main frame and panels
         cardLayout = new CardLayout();
@@ -40,8 +41,7 @@ public class UIUtils {
 
         // 3. Add the logic for the login button
         loginUI.loginButton.addActionListener(_ -> {
-            String username = loginUI.usernameField.getText();
-
+            username = loginUI.usernameField.getText();
             if (username.equals("admin")) {
                 // --- ADMIN LOGIN ---
                 adminUI = new AdminDashboard();
@@ -82,5 +82,14 @@ public class UIUtils {
         JPanel cPanel = cUI.complaintUI;
         panel.add(cPanel, "complaint");
         cardLayout.show(panel, "complaint");
+
+        cUI.backButton.addActionListener(_ -> {
+            backToDashboard(username);
+        });
+    }
+
+    public static void backToDashboard(String userType) {
+        userType = userType.equals("admin") ? "admin" : "user";
+        cardLayout.show(panel, userType);
     }
 }
