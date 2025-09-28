@@ -8,8 +8,8 @@ import ui.helpers.RowHelper;
 
 public class UIUtils {
     JFrame frame;
-    CardLayout cardLayout;
-    JPanel panel;
+    static CardLayout cardLayout;
+    static JPanel panel;
     JPanel tableBody;
 
     LoginUI loginUI;
@@ -57,5 +57,12 @@ public class UIUtils {
 
     public void show() {
         frame.setVisible(true);
+    }
+
+    public static void showComplaint(int ID) {
+        ComplaintUI cUI = new ComplaintUI(ID);
+        JPanel cPanel = cUI.complaintUI;
+        panel.add(cPanel, "complaint");
+        cardLayout.show(panel, "complaint");
     }
 }
