@@ -21,6 +21,8 @@ public class UIUtils {
     UserDashboard userUI;
     JPanel userPanel;
 
+    static String username;
+
     public UIUtils() {
         cardLayout = new CardLayout();
         panel = new JPanel(cardLayout);
@@ -37,7 +39,7 @@ public class UIUtils {
         frame.add(panel);
 
         loginUI.loginButton.addActionListener(_ -> {
-            String username = loginUI.usernameField.getText();
+            username = loginUI.usernameField.getText();
             if (username.equals("admin")) {
                 adminUI = new AdminDashboard();
                 adminPanel = adminUI.panel;
@@ -64,5 +66,14 @@ public class UIUtils {
         JPanel cPanel = cUI.complaintUI;
         panel.add(cPanel, "complaint");
         cardLayout.show(panel, "complaint");
+
+        cUI.backButton.addActionListener(_ -> {
+            backToDashboard(username);
+        });
+    }
+
+    public static void backToDashboard(String userType) {
+        userType = userType.equals("admin") ? "admin" : "user";
+        cardLayout.show(panel, userType);
     }
 }
