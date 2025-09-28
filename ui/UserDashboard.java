@@ -38,6 +38,10 @@ public class UserDashboard {
         addComplaint.setPreferredSize(new Dimension(60, 20));
         addComplaint.setMaximumSize(new Dimension(60, 20));
 
+        addComplaint.addActionListener(_ -> {
+            UIUtils.addComplaint();
+        });
+
         topPanel = new JPanel(new BorderLayout());
         topPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
         topPanel.add(userNameLabel, BorderLayout.WEST);

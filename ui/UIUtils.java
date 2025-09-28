@@ -1,16 +1,20 @@
 package ui;
 
 import java.awt.CardLayout;
+
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import data.Retrieve;
+import data.Store;
 import ui.helpers.RowHelper;
 
 public class UIUtils {
     JFrame frame;
     static CardLayout cardLayout;
     static JPanel panel;
-    JPanel tableBody;
+    static JPanel tableBody;
 
     LoginUI loginUI;
     JPanel loginPanel;
@@ -79,6 +83,45 @@ public class UIUtils {
     // This method can be called from other parts of the app to show a specific complaint
     public static void showComplaint(int ID) {
         ComplaintUI cUI = new ComplaintUI(ID);
+        JPanel cPanel = cUI.complaintUI;
+        panel.add(cPanel, "complaint");
+        cardLayout.show(panel, "complaint");
+
+        cUI.backButton.addActionListener(_ -> {
+            backToDashboard(username);
+        });
+    }
+
+    /**
+     * Adds a complaint to the database
+     * 
+     * This method creates a new complaint with the given ID and adds it to the database.
+     * It then adds the complaint to the table body and repaints the table body.
+     * Finally, it goes back to the dashboard.
+     */
+    public static void addComplaint() {
+        int ID = Retrieve.getNewID();
+
+        ComplaintUI cUI = new ComplaintUI(ID);
+
+        JButton submitButton = new JButton("Submit");
+
+        submitButton.addActionListener(_ -> {
+            String subject = cUI.subject;
+            String description = cUI.description;
+            String priority = "";
+
+            Store.saveComplaint(username, subject, description, priority, ID);
+            RowHelper.addRow(tableBody, subject, priority, ID);
+            tableBody.revalidate();
+            tableBody.repaint();
+            backToDashboard(username);
+        });
+
+        cUI.bottomPanel.remove(cUI.timeLabel);
+        cUI.bottomPanel.remove(cUI.complainerLabel);
+        cUI.bottomPanel.add(submitButton);
+
         JPanel cPanel = cUI.complaintUI;
         panel.add(cPanel, "complaint");
         cardLayout.show(panel, "complaint");
