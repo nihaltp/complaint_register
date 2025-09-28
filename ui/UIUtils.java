@@ -48,16 +48,6 @@ public class UIUtils {
                 adminPanel = adminUI.panel;
                 tableBody = adminUI.tableBody;
                 panel.add(adminPanel, "admin");
-                
-                // (Original RowHelper code)
-                RowHelper.addRow(tableBody, "Just checking", "High", 5);
-                RowHelper.addRow(tableBody, "checking", "Low", 10);
-                RowHelper.addRow(tableBody, "Just Testing", "Medium", 15);
-                RowHelper.addRow(tableBody, "Just Testing", "Medium", 20);
-                RowHelper.addRow(tableBody, "Just Testing", "Medium", 25);
-                RowHelper.addRow(tableBody, "Just Testing", "Medium", 30);
-                RowHelper.addRow(tableBody, "Just Testing", "Medium", 35);
-                
                 cardLayout.show(panel, "admin");
 
                 // --- NEW: Add the logout listener for the admin dashboard ---
@@ -71,16 +61,6 @@ public class UIUtils {
                 userPanel = userUI.panel;
                 tableBody = userUI.tableBody;
                 panel.add(userPanel, "user");
-                
-                // (Original RowHelper code)
-                RowHelper.addRow(tableBody, "Just checking", "High", 5);
-                RowHelper.addRow(tableBody, "checking", "Low", 10);
-                RowHelper.addRow(tableBody, "Just Testing", "Medium", 15);
-                RowHelper.addRow(tableBody, "Just Testing", "Medium", 20);
-                RowHelper.addRow(tableBody, "Just Testing", "Medium", 25);
-                RowHelper.addRow(tableBody, "Just Testing", "Medium", 30);
-                RowHelper.addRow(tableBody, "Just Testing", "Medium", 35);
-                
                 cardLayout.show(panel, "user");
                 
                 // --- NEW: Add the logout listener for the user dashboard ---
