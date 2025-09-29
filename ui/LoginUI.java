@@ -1,82 +1,60 @@
 package ui;
 
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-import javax.swing.SwingConstants;
+import javax.swing.BoxLayout;
 import javax.swing.border.EmptyBorder;
 
 public class LoginUI {
-    public JPanel panel;
-    public JTextField usernameField;
-    public JPasswordField passwordField; // Renamed from 'password' for clarity
-    public JButton loginButton;
+    JPanel panel;
+    JPanel usernamePanel;
+    JPanel passwordPanel;
+    JPanel loginPanel;
 
-    public LoginUI() {
-        // Main panel using GridBagLayout for flexible alignment
-        panel = new JPanel(new GridBagLayout());
-        panel.setBorder(new EmptyBorder(40, 40, 40, 40)); // Add generous padding around the form
+    JLabel usernameLabel;
+    JLabel passwordLabel;
 
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 5, 10, 5); // Spacing between components
-        gbc.gridwidth = 2; // Components will span two columns by default
-        gbc.anchor = GridBagConstraints.CENTER; // Center-align components
+    JTextField usernameField;
+    JPasswordField password;
+    JButton loginButton;
 
-        // 1. A welcoming title
-        JLabel titleLabel = new JLabel("Complaint Management System");
-        titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 28));
-        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        panel.add(titleLabel, gbc);
+    public LoginUI () {
+        panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.setBorder(new EmptyBorder(30, 100, 30, 50));
 
-        // --- Form Fields ---
-        gbc.gridwidth = 1; // Reset grid width for labels and fields
-        gbc.anchor = GridBagConstraints.EAST; // Align labels to the right
+        usernameLabel = new JLabel("Username: ");
 
-        // 2. Username Label
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        JLabel usernameLabel = new JLabel("Username:");
-        usernameLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        panel.add(usernameLabel, gbc);
+        usernameField = new JTextField();
+        usernameField.setText("username");
+        usernameField.setPreferredSize(new Dimension(180, 25));
 
-        // 3. Username Text Field
-        gbc.gridx = 1;
-        gbc.anchor = GridBagConstraints.WEST; // Align fields to the left
-        usernameField = new JTextField(15); // Set a preferred width in columns
-        usernameField.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        panel.add(usernameField, gbc);
+        usernamePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
+        usernamePanel.add(usernameLabel);
+        usernamePanel.add(usernameField);
 
-        // 4. Password Label
-        gbc.gridx = 0;
-        gbc.gridy = 2;
-        gbc.anchor = GridBagConstraints.EAST;
-        JLabel passwordLabel = new JLabel("Password:");
-        passwordLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        panel.add(passwordLabel, gbc);
+        passwordPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
+        passwordLabel = new JLabel("Password: ");
 
-        // 5. Password Field
-        gbc.gridx = 1;
-        gbc.anchor = GridBagConstraints.WEST;
-        passwordField = new JPasswordField(15);
-        passwordField.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        panel.add(passwordField, gbc);
+        password = new JPasswordField();
+        password.setText("password");
+        password.setPreferredSize(new Dimension(180, 25));
 
-        // 6. Login Button
-        gbc.gridwidth = 2; // Span both columns
-        gbc.gridy = 3;
-        gbc.anchor = GridBagConstraints.CENTER;
-        gbc.fill = GridBagConstraints.HORIZONTAL; // Make button fill the width
+        passwordPanel.add(passwordLabel);
+        passwordPanel.add(password);
+
         loginButton = new JButton("LOGIN");
-        loginButton.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        panel.add(loginButton, gbc);
+        loginPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 20));
+        loginPanel.add(loginButton);
+
+        panel.add(usernamePanel);
+        panel.add(passwordPanel);
+        panel.add(loginPanel);
     }
 }

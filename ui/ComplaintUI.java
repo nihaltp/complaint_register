@@ -59,13 +59,14 @@ public class ComplaintUI {
         
         // --- FIX: Use a JTextField for the single-line subject ---
         javax.swing.JTextField subjectField = new javax.swing.JTextField("Subject: " + subject);
-        subjectField.setEditable(false);
+        subjectField.setEditable(!UIUtils.username.equals("admin"));
         
         // The multi-line description area
         descriptionArea = new JTextArea(description);
         descriptionArea.setLineWrap(true);
         descriptionArea.setWrapStyleWord(true);
-        descriptionArea.setEditable(false);
+        descriptionArea.setEditable(!UIUtils.username.equals("admin"));
+
         descScroll = new JScrollPane(descriptionArea);
         
         timeLabel = new JLabel(java.time.LocalTime.now().format(java.time.format.DateTimeFormatter.ofPattern("HH:mm:ss")));
