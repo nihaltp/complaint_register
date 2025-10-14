@@ -52,6 +52,7 @@ public class UIUtils {
                 adminPanel = adminUI.panel;
                 tableBody = adminUI.tableBody;
                 panel.add(adminPanel, "admin");
+                Retrieve.showComplaints(tableBody, username);
                 cardLayout.show(panel, "admin");
 
                 // --- NEW: Add the logout listener for the admin dashboard ---
@@ -65,6 +66,7 @@ public class UIUtils {
                 userPanel = userUI.panel;
                 tableBody = userUI.tableBody;
                 panel.add(userPanel, "user");
+                Retrieve.showComplaints(tableBody, username);
                 cardLayout.show(panel, "user");
                 
                 // --- NEW: Add the logout listener for the user dashboard ---
