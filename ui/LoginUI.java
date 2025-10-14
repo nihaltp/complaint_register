@@ -1,7 +1,10 @@
 package ui;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -24,6 +27,9 @@ public class LoginUI {
     JPasswordField password;
     JButton loginButton;
 
+    private static final String USERNAME_PLACEHOLDER = "Enter your username";
+    private static final String PASSWORD_PLACEHOLDER = "Enter your password";
+
     public LoginUI () {
         panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
@@ -32,8 +38,10 @@ public class LoginUI {
         usernameLabel = new JLabel("Username: ");
 
         usernameField = new JTextField();
-        usernameField.setText("username");
+        usernameField.setText(USERNAME_PLACEHOLDER);
         usernameField.setPreferredSize(new Dimension(180, 25));
+        usernameField.setForeground(Color.GRAY);
+        addListener(usernameField, USERNAME_PLACEHOLDER, false);
 
         usernamePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
         usernamePanel.add(usernameLabel);
@@ -43,8 +51,11 @@ public class LoginUI {
         passwordLabel = new JLabel("Password: ");
 
         password = new JPasswordField();
-        password.setText("password");
+        password.setText(PASSWORD_PLACEHOLDER);
         password.setPreferredSize(new Dimension(180, 25));
+        password.setEchoChar((char) 0);
+        password.setForeground(Color.GRAY);
+        addListener(password, PASSWORD_PLACEHOLDER, true);
 
         passwordPanel.add(passwordLabel);
         passwordPanel.add(password);
@@ -56,5 +67,35 @@ public class LoginUI {
         panel.add(usernamePanel);
         panel.add(passwordPanel);
         panel.add(loginPanel);
+    }
+
+    private void addListener(JTextField field, String placeholder, boolean isPassword) {
+        field.setForeground(Color.GRAY);
+        if (isPassword && field instanceof JPasswordField) {
+            ((JPasswordField) field).setEchoChar((char) 0);
+        }
+        field.setText(placeholder);
+
+        field.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                if (field.getText().equals(placeholder)) {
+                    field.setText("");
+                    field.setForeground(Color.BLACK);
+                    if (isPassword && field instanceof JPasswordField)
+                        ((JPasswordField) field).setEchoChar('•');
+                }
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (field.getText().equals("")) {
+                    field.setForeground(Color.GRAY);
+                    field.setText(placeholder);
+                    if (isPassword && field instanceof JPasswordField)
+                        ((JPasswordField) field).setEchoChar((char) 0);
+                }
+            }
+        });
     }
 }
