@@ -1,7 +1,10 @@
 package ui;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -20,9 +23,12 @@ public class LoginUI {
     JLabel usernameLabel;
     JLabel passwordLabel;
 
-    JTextField usernameField;
-    JPasswordField password;
+    private JTextField usernameField;
+    private JPasswordField password;
     JButton loginButton;
+
+    private static final String USERNAME_PLACEHOLDER = "Enter your username";
+    private static final String PASSWORD_PLACEHOLDER = "Enter your password";
 
     public LoginUI () {
         panel = new JPanel();
@@ -32,8 +38,8 @@ public class LoginUI {
         usernameLabel = new JLabel("Username: ");
 
         usernameField = new JTextField();
-        usernameField.setText("username");
         usernameField.setPreferredSize(new Dimension(180, 25));
+        addListener(usernameField, USERNAME_PLACEHOLDER, false);
 
         usernamePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
         usernamePanel.add(usernameLabel);
@@ -43,8 +49,8 @@ public class LoginUI {
         passwordLabel = new JLabel("Password: ");
 
         password = new JPasswordField();
-        password.setText("password");
         password.setPreferredSize(new Dimension(180, 25));
+        addListener(password, PASSWORD_PLACEHOLDER, true);
 
         passwordPanel.add(passwordLabel);
         passwordPanel.add(password);
@@ -56,5 +62,63 @@ public class LoginUI {
         panel.add(usernamePanel);
         panel.add(passwordPanel);
         panel.add(loginPanel);
+    }
+
+    private void addListener(JTextField field, String placeholder, boolean isPassword) {
+        field.setForeground(Color.GRAY);
+        if (isPassword && field instanceof JPasswordField) {
+            ((JPasswordField) field).setEchoChar((char) 0);
+        }
+        field.setText(placeholder);
+
+        field.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                if (field.getText().equals(placeholder)) {
+                    field.setText("");
+                    field.setForeground(Color.BLACK);
+                    if (isPassword && field instanceof JPasswordField)
+                        ((JPasswordField) field).setEchoChar('•');
+                }
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (field.getText().equals("")) {
+                    field.setForeground(Color.GRAY);
+                    field.setText(placeholder);
+                    if (isPassword && field instanceof JPasswordField)
+                        ((JPasswordField) field).setEchoChar((char) 0);
+                }
+            }
+        });
+    }
+
+    /**
+     * Retrieves the username from the login form, ignoring the placeholder.
+     * @return The username entered by the user, or an empty string if the
+     *         user did not enter a username.
+     */
+    public String getUsername() {
+        String username = usernameField.getText();
+        if (username.equals(USERNAME_PLACEHOLDER)) {
+            return "";
+        }
+        return username;
+    }
+
+    /**
+     * Clears the username and password fields by setting their text to the placeholder
+     * and their foreground color to gray. If the password field is a JPasswordField, it
+     * also sets the echo character to 0.
+     */
+    public void clearFields() {
+        usernameField.setText(USERNAME_PLACEHOLDER);
+        usernameField.setForeground(Color.GRAY);
+        password.setText(PASSWORD_PLACEHOLDER);
+        password.setForeground(Color.GRAY);
+        if (password instanceof JPasswordField) {
+            ((JPasswordField) password).setEchoChar((char) 0);
+        }
     }
 }

@@ -45,4 +45,12 @@ public class RowHelper {
 
         tableBody.add(row);
     }
+
+    /**
+     * Resets the slNo to 1.
+     * This is used when the user switches after logout
+     */
+    public static void resetSlNo() {
+        slNo = 1;
+    }
 }

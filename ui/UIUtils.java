@@ -45,18 +45,19 @@ public class UIUtils {
 
         // 3. Add the logic for the login button
         loginUI.loginButton.addActionListener(_ -> {
-            username = loginUI.usernameField.getText();
+            username = loginUI.getUsername();
             if (username.equals("admin")) {
                 // --- ADMIN LOGIN ---
                 adminUI = new AdminDashboard();
                 adminPanel = adminUI.panel;
                 tableBody = adminUI.tableBody;
                 panel.add(adminPanel, "admin");
+                Retrieve.showComplaints(tableBody, username);
                 cardLayout.show(panel, "admin");
 
                 // --- NEW: Add the logout listener for the admin dashboard ---
                 adminUI.logoutButton.addActionListener(e -> {
-                    cardLayout.show(panel, "login");
+                    logout();
                 });
 
             } else {
@@ -65,11 +66,12 @@ public class UIUtils {
                 userPanel = userUI.panel;
                 tableBody = userUI.tableBody;
                 panel.add(userPanel, "user");
+                Retrieve.showComplaints(tableBody, username);
                 cardLayout.show(panel, "user");
                 
                 // --- NEW: Add the logout listener for the user dashboard ---
                 userUI.logoutButton.addActionListener(e -> {
-                    cardLayout.show(panel, "login");
+                    logout();
                 });
             }
         });
@@ -134,5 +136,11 @@ public class UIUtils {
     public static void backToDashboard(String userType) {
         userType = userType.equals("admin") ? "admin" : "user";
         cardLayout.show(panel, userType);
+    }
+
+    public void logout() {
+        cardLayout.show(panel, "login");
+        ui.helpers.RowHelper.resetSlNo(); // Reset serial number for new login
+        loginUI.clearFields();
     }
 }
