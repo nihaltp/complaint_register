@@ -23,8 +23,8 @@ public class LoginUI {
     JLabel usernameLabel;
     JLabel passwordLabel;
 
-    JTextField usernameField;
-    JPasswordField password;
+    private JTextField usernameField;
+    private JPasswordField password;
     JButton loginButton;
 
     private static final String USERNAME_PLACEHOLDER = "Enter your username";
@@ -92,5 +92,33 @@ public class LoginUI {
                 }
             }
         });
+    }
+
+    /**
+     * Retrieves the username from the login form, ignoring the placeholder.
+     * @return The username entered by the user, or an empty string if the
+     *         user did not enter a username.
+     */
+    public String getUsername() {
+        String username = usernameField.getText();
+        if (username.equals(USERNAME_PLACEHOLDER)) {
+            return "";
+        }
+        return username;
+    }
+
+    /**
+     * Clears the username and password fields by setting their text to the placeholder
+     * and their foreground color to gray. If the password field is a JPasswordField, it
+     * also sets the echo character to 0.
+     */
+    public void clearFields() {
+        usernameField.setText(USERNAME_PLACEHOLDER);
+        usernameField.setForeground(Color.GRAY);
+        password.setText(PASSWORD_PLACEHOLDER);
+        password.setForeground(Color.GRAY);
+        if (password instanceof JPasswordField) {
+            ((JPasswordField) password).setEchoChar((char) 0);
+        }
     }
 }
