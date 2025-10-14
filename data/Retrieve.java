@@ -21,7 +21,7 @@ public class Retrieve {
         // add complaints to body using RowHelper.addRow(...)
         if (!Auth.isUser(username)) {
             // user not found
-            return;
+            throw new IllegalArgumentException("User not found: " + username);
         }
         if (Auth.isAdmin(username)) {
             // show all complaints

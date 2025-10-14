@@ -38,9 +38,7 @@ public class LoginUI {
         usernameLabel = new JLabel("Username: ");
 
         usernameField = new JTextField();
-        usernameField.setText(USERNAME_PLACEHOLDER);
         usernameField.setPreferredSize(new Dimension(180, 25));
-        usernameField.setForeground(Color.GRAY);
         addListener(usernameField, USERNAME_PLACEHOLDER, false);
 
         usernamePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
@@ -51,10 +49,7 @@ public class LoginUI {
         passwordLabel = new JLabel("Password: ");
 
         password = new JPasswordField();
-        password.setText(PASSWORD_PLACEHOLDER);
         password.setPreferredSize(new Dimension(180, 25));
-        password.setEchoChar((char) 0);
-        password.setForeground(Color.GRAY);
         addListener(password, PASSWORD_PLACEHOLDER, true);
 
         passwordPanel.add(passwordLabel);
