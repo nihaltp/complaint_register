@@ -72,6 +72,7 @@ public class UIUtils {
                 // --- NEW: Add the logout listener for the user dashboard ---
                 userUI.logoutButton.addActionListener(e -> {
                     cardLayout.show(panel, "login");
+                    ui.helpers.RowHelper.resetSlNo(); // Reset serial number for new login
                 });
             }
         });
