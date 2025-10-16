@@ -1,0 +1,21 @@
+name: Auto Assign Copilot Reviewer
+
+on:
+    pull_request:
+        types: [opened, reopened, synchronize, edited]
+        branches:
+            - main
+
+jobs:
+    add-reviewer:
+        runs-on: ubuntu-latest
+        
+        permissions:
+            pull-requests: write
+        
+        steps:
+            - name: Assign GitHub Copilot as reviewer
+              uses: peter-evans/request-reviewers@v3
+              with:
+                token: ${{ secrets.GITHUB_TOKEN }}
+                reviewers: copilot
