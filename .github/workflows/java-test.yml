@@ -1,5 +1,8 @@
 name: Java Quality Checks
 
+permissions:
+  contents: write
+
 on:
   pull_request:
     types: [opened, synchronize, reopened, edited]
