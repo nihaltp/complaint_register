@@ -108,9 +108,12 @@ public class UIUtils {
 
         JButton submitButton = new JButton("Submit");
 
-        submitButton.addActionListener(_ -> {
-            String subject = cUI.subject;
-            String description = cUI.description;
+        submitButton.addActionListener(e -> {
+            String subject = cUI.subjectField.getText();
+            if (subject.startsWith("Subject: ")) {
+                subject = subject.substring("Subject: ".length());
+            }
+            String description = cUI.descriptionArea.getText();
             String priority = "";
 
             Store.saveComplaint(username, subject, description, priority, ID);
