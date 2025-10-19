@@ -30,6 +30,7 @@ jobs:
 
   checkstyle:
     needs: spotless-apply
+    if: always()
     runs-on: ubuntu-latest
 
     steps:
@@ -44,6 +45,7 @@ jobs:
 
   spotbugs:
     needs: spotless-apply
+    if: always()
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -56,6 +58,7 @@ jobs:
 
   tests:
     needs: spotless-apply
+    if: always()
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -68,6 +71,7 @@ jobs:
 
   compile:
     needs: spotless-apply
+    if: always()
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -82,6 +86,7 @@ jobs:
 
   run-main:
     needs: spotless-apply
+    if: always()
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
