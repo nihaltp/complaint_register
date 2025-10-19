@@ -15,7 +15,7 @@ jobs:
         
         steps:
             - name: Assign GitHub Copilot as reviewer
-              uses: peter-evans/request-reviewers@v3
+              uses: hkusu/review-assign-action@v1.4.0
               with:
                 token: ${{ secrets.GITHUB_TOKEN }}
                 reviewers: copilot

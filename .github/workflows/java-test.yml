@@ -1,5 +1,8 @@
 name: Java Quality Checks
 
+permissions:
+  contents: write
+
 on:
   pull_request:
     types: [opened, synchronize, reopened, edited]
@@ -7,7 +10,26 @@ on:
       - main   # Trigger only on PRs targeting the main branch
 
 jobs:
+  spotless-apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '24'
+          distribution: 'temurin'
+      - name: Apply Spotless formatting
+        run: mvn spotless:apply
+      - name: Commit changes if any
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add .
+          git diff --quiet || git commit -m "Apply Spotless formatting"
+          git push origin HEAD:${{ github.head_ref }}
+
   checkstyle:
+    needs: spotless-apply
     runs-on: ubuntu-latest
 
     steps:
@@ -21,6 +43,7 @@ jobs:
         run: mvn checkstyle:check
 
   spotbugs:
+    needs: spotless-apply
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -31,18 +54,8 @@ jobs:
       - name: Run SpotBugs
         run: mvn spotbugs:check
 
-  spotless:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
-        with:
-          java-version: '24'
-          distribution: 'temurin'
-      - name: Verify Code Format
-        run: mvn spotless:check
-
   tests:
+    needs: spotless-apply
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -54,6 +67,7 @@ jobs:
         run: mvn test
 
   compile:
+    needs: spotless-apply
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -67,6 +81,7 @@ jobs:
           javac -d bin $(find . -name "*.java")
 
   run-main:
+    needs: spotless-apply
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -77,5 +92,5 @@ jobs:
       - name: Run main class
         run: |
           mkdir -p out
-          javac -d out $(find src -name "*.java")
+          javac -d out *.java
           java -cp out your.package.MainClass || true
