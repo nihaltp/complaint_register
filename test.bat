@@ -65,13 +65,13 @@ echo.
 
 :: -------------------- RUN MAIN --------------------
 echo [6/6] Running main class...
-cmd /c "if not exist out mkdir out"
+cmd /c "if not exist bin mkdir bin"
 
 :: Generate file list without quotes
 cmd /c "(for /r %%f in (*.java) do @echo %%f) > logs\java_files.txt"
 
 :: Compile all Java files
-cmd /c "javac -d out @logs\java_files.txt >logs\runmain_compile.log 2>&1"
+cmd /c "javac -d bin @logs\java_files.txt >logs\runmain_compile.log 2>&1"
 if %errorlevel% neq 0 (
     echo [FAIL] Main compilation failed. Check logs\runmain_compile.log
 ) else (
@@ -80,7 +80,7 @@ if %errorlevel% neq 0 (
 
 :: Run the main class
 set MAIN_CLASS=Main
-cmd /c "java -cp out %MAIN_CLASS% >logs\runmain.log 2>&1"
+cmd /c "java -cp bin %MAIN_CLASS% >logs\runmain.log 2>&1"
 if %errorlevel% neq 0 (
     echo [WARN] Main class exited with errors. Check logs\runmain.log
 ) else (
