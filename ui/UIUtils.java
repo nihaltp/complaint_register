@@ -110,6 +110,9 @@ public class UIUtils {
 
         submitButton.addActionListener(e -> {
             String subject = cUI.subjectField.getText();
+            if (subject.startsWith("Subject: ")) {
+                subject = subject.substring("Subject: ".length());
+            }
             String description = cUI.descriptionArea.getText();
             String priority = "";
 
