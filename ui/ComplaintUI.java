@@ -15,6 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
 public class ComplaintUI {
     JPanel complaintUI;
@@ -31,7 +32,7 @@ public class ComplaintUI {
     JLabel timeLabel;
     JLabel complainerLabel;
     
-    JTextArea subjectArea;
+    JTextField subjectField;
     JTextArea descriptionArea;
 
     JScrollPane descScroll;
@@ -58,7 +59,7 @@ public class ComplaintUI {
         idLabel = new JLabel("#" + ID);
         
         // --- FIX: Use a JTextField for the single-line subject ---
-        javax.swing.JTextField subjectField = new javax.swing.JTextField("Subject: " + subject);
+        subjectField = new javax.swing.JTextField("Subject: " + subject);
         subjectField.setEditable(!UIUtils.username.equals("admin"));
         
         // The multi-line description area
