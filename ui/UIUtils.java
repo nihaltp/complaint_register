@@ -48,7 +48,14 @@ public class UIUtils {
         a -> {
           try {
             username = loginUI.getUsername();
-            String status = login.check(username, loginUI.getPassword());
+            String password = loginUI.getPassword();
+
+            if (username.isEmpty() || password.isEmpty()) {
+              loginUI.showError("Empty username or password.");
+              return;
+            }
+
+            String status = login.check(username, password);
             if (status.equals("admin")) {
               // --- ADMIN LOGIN ---
               adminUI = new AdminDashboard();
@@ -78,16 +85,11 @@ public class UIUtils {
                   e -> {
                     logout();
                   });
+            } else {
+              loginUI.showError("Invalid username or password.");
             }
-          } catch (NullPointerException ex) {
-            // loginUI.showError("Empty username or password."); // TODO: implement showError
-            System.err.println("Empty username or password.");
-          } catch (IllegalArgumentException ex) {
-            // loginUI.showError("Invalid username or password.");
-            System.err.println("Invalid username or password.");
           } catch (Exception ex) {
-            // loginUI.showError("An error occurred during login.");
-            System.err.println("An error occurred during login.");
+            loginUI.showError("An error occurred during login.");
             ex.printStackTrace();
           }
         });
