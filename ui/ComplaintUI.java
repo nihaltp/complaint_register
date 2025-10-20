@@ -1,11 +1,13 @@
 package ui;
 
+import auth.Auth;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -22,6 +24,8 @@ public class ComplaintUI {
 
   JButton backButton;
 
+  JComboBox<String> priorityBox;
+
   JLabel idLabel;
   JLabel complaintLabel;
   JLabel timeLabel;
@@ -32,6 +36,7 @@ public class ComplaintUI {
 
   JScrollPane descScroll;
 
+  String priority;
   String subject;
   String complaint;
   String description;
@@ -44,6 +49,7 @@ public class ComplaintUI {
    */
   public ComplaintUI(int ID) {
     // --- Your original variable declarations and hardcoded data ---
+    priority = "new";
     subject = "sample subject";
     description =
         "Sample description, should be updated with backed to retrive from the database\n";
@@ -57,13 +63,13 @@ public class ComplaintUI {
 
     // --- FIX: Use a JTextField for the single-line subject ---
     subjectField = new javax.swing.JTextField("Subject: " + subject);
-    subjectField.setEditable(!UIUtils.username.equals("admin"));
+    subjectField.setEditable(!Auth.isAdmin(UIUtils.username));
 
     // The multi-line description area
     descriptionArea = new JTextArea(description);
     descriptionArea.setLineWrap(true);
     descriptionArea.setWrapStyleWord(true);
-    descriptionArea.setEditable(!UIUtils.username.equals("admin"));
+    descriptionArea.setEditable(!Auth.isAdmin(UIUtils.username));
 
     descScroll = new JScrollPane(descriptionArea);
 
@@ -78,6 +84,17 @@ public class ComplaintUI {
     // 1. Top panel for the back button
     topPanel = new JPanel(new BorderLayout());
     topPanel.add(backButton, BorderLayout.WEST);
+
+    if (Auth.isAdmin(UIUtils.username)) {
+      priorityBox = new JComboBox(new String[] {"new", "low", "medium", "high", "resolved"});
+      priorityBox.setSelectedItem(priority);
+      priorityBox.setEditable(false);
+      priorityBox.addActionListener(
+          e -> {
+            priority = (String) priorityBox.getSelectedItem();
+          });
+      topPanel.add(priorityBox, BorderLayout.EAST);
+    }
 
     // 2. Header panel for ID and Subject
     JPanel headerPanel = new JPanel();
