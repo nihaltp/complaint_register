@@ -1,5 +1,6 @@
 package ui;
 
+import auth.Auth;
 import auth.login;
 import data.Retrieve;
 import data.Store;
@@ -154,9 +155,12 @@ public class UIUtils {
         });
   }
 
-  public static void backToDashboard(String userType) {
-    userType = userType.equals("admin") ? "admin" : "user";
-    cardLayout.show(panel, userType);
+  public static void backToDashboard(String currentUser) {
+    if (Auth.isAdmin(currentUser)) {
+      cardLayout.show(panel, "admin");
+    } else {
+      cardLayout.show(panel, "user");
+    }
   }
 
   public void logout() {
