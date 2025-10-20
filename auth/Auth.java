@@ -1,11 +1,10 @@
 package auth;
 
+import db.DBconnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
-import db.DBconnection;
 
 public class Auth {
   /**
@@ -44,7 +43,7 @@ public class Auth {
     try (Connection conn = DBconnection.getConnection();
         PreparedStatement ps = conn.prepareStatement(sql)) {
       ps.setString(1, username);
-     
+
       try (ResultSet rs = ps.executeQuery()) {
         found = rs.next(); // returns true if a record exists with matching username and password
       }
