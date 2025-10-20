@@ -23,6 +23,7 @@ public class LoginUI {
 
   JLabel usernameLabel;
   JLabel passwordLabel;
+  JLabel errorLabel; // Add this line
 
   private JTextField usernameField;
   private JPasswordField password;
@@ -55,6 +56,12 @@ public class LoginUI {
 
     passwordPanel.add(passwordLabel);
     passwordPanel.add(password);
+    
+    // Create and add the error label
+    errorLabel = new JLabel(" ");
+    errorLabel.setForeground(Color.RED);
+    JPanel errorPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+    errorPanel.add(errorLabel);
 
     loginButton = new JButton("LOGIN");
     loginPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 20));
@@ -62,6 +69,7 @@ public class LoginUI {
 
     panel.add(usernamePanel);
     panel.add(passwordPanel);
+    panel.add(errorPanel); // Add the error panel to the UI
     panel.add(loginPanel);
 
     // Add ActionListener to trigger login on Enter key press
@@ -88,6 +96,7 @@ public class LoginUI {
         new FocusListener() {
           @Override
           public void focusGained(FocusEvent e) {
+            clearError(); // Clear error when user starts typing
             if (field.getText().equals(placeholder)) {
               field.setText("");
               field.setForeground(Color.BLACK);
@@ -108,11 +117,21 @@ public class LoginUI {
         });
   }
 
+  // Method to display an error message
+  public void showError(String message) {
+    errorLabel.setText(message);
+  }
+  
+  // Method to clear the error message
+  public void clearError() {
+      errorLabel.setText(" ");
+  }
+
   /**
    * Retrieves the username from the login form, ignoring the placeholder.
    *
    * @return The username entered by the user, or an empty string if the user did not enter a
-   *     username.
+   * username.
    */
   public String getUsername() {
     String username = usernameField.getText();
@@ -126,7 +145,7 @@ public class LoginUI {
    * Retrieves the password from the login form, ignoring the placeholder.
    *
    * @return The password entered by the user, or an empty string if the user did not enter a
-   *     password.
+   * password.
    */
   public String getPassword() {
     String pwd = new String(password.getPassword());
