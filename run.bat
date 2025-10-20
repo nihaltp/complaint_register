@@ -8,21 +8,23 @@ cmd /c "mvn spotless:apply"
 if not exist bin mkdir bin
 
 :: Gather all .java files recursively
-set SOURCES=
+set "SOURCES="
 for /r %%f in (*.java) do (
-    set SOURCES=!SOURCES! "%%f"
+    set "SOURCES=!SOURCES! "%%f""
 )
 
-:: Compile all sources at once
-echo Compiling sources...
-javac -d bin -cp bin !SOURCES!
-if errorlevel 1 (
+REM Compile all the found source files, including the library path.
+javac -cp ".;lib/*" -d bin %SOURCES%
+
+REM Check if compilation failed
+if %errorlevel% neq 0 (
     echo Compilation failed. Exiting...
-    exit /b 1
+    REM Pause to allow user to see the error before the window closes
+    pause
+    exit /b %errorlevel%
 )
 
-:: Run Main class
-echo.
-echo Running Main
-echo.
-java -cp bin Main
+echo Running Main...
+REM Run the main class, making sure to include both the lib and bin folders in the classpath.
+java -cp ".;lib/*;bin" Main
+
