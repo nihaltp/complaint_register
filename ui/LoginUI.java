@@ -69,7 +69,7 @@ public class LoginUI {
 
     panel.add(usernamePanel);
     panel.add(passwordPanel);
-    panel.add(errorPanel); 
+    panel.add(errorPanel); // Add the error panel to the UI
     panel.add(loginPanel);
 
     // Add ActionListener to trigger login on Enter key press

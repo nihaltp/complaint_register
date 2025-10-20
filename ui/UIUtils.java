@@ -64,6 +64,7 @@ public class UIUtils {
               panel.add(adminPanel, "admin");
               Retrieve.showComplaints(tableBody, username);
               cardLayout.show(panel, "admin");
+
               adminUI.logoutButton.addActionListener(
                   e -> {
                     logout();
