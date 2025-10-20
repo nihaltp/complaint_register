@@ -45,36 +45,49 @@ public class UIUtils {
     // 3. Add the logic for the login button
     loginUI.loginButton.addActionListener(
         a -> {
-          username = loginUI.getUsername();
-          if (login.check(username, loginUI.getPassword()).equals("admin")) {
-            // --- ADMIN LOGIN ---
-            adminUI = new AdminDashboard();
-            adminPanel = adminUI.panel;
-            tableBody = adminUI.tableBody;
-            panel.add(adminPanel, "admin");
-            Retrieve.showComplaints(tableBody, username);
-            cardLayout.show(panel, "admin");
+          try {
+            username = loginUI.getUsername();
+            String status = login.check(username, loginUI.getPassword());
+            if (status.equals("admin")) {
+              // --- ADMIN LOGIN ---
+              adminUI = new AdminDashboard();
+              adminPanel = adminUI.panel;
+              tableBody = adminUI.tableBody;
+              panel.add(adminPanel, "admin");
+              Retrieve.showComplaints(tableBody, username);
+              cardLayout.show(panel, "admin");
 
-            // --- NEW: Add the logout listener for the admin dashboard ---
-            adminUI.logoutButton.addActionListener(
-                e -> {
-                  logout();
-                });
+              // --- NEW: Add the logout listener for the admin dashboard ---
+              adminUI.logoutButton.addActionListener(
+                  e -> {
+                    logout();
+                  });
 
-          } else if (login.check(username, loginUI.getPassword()).equals("user")) {
-            // --- NORMAL USER LOGIN ---
-            userUI = new UserDashboard(username);
-            userPanel = userUI.panel;
-            tableBody = userUI.tableBody;
-            panel.add(userPanel, "user");
-            Retrieve.showComplaints(tableBody, username);
-            cardLayout.show(panel, "user");
+            } else if (status.equals("user")) {
+              // --- NORMAL USER LOGIN ---
+              userUI = new UserDashboard(username);
+              userPanel = userUI.panel;
+              tableBody = userUI.tableBody;
+              panel.add(userPanel, "user");
+              Retrieve.showComplaints(tableBody, username);
+              cardLayout.show(panel, "user");
 
-            // --- NEW: Add the logout listener for the user dashboard ---
-            userUI.logoutButton.addActionListener(
-                e -> {
-                  logout();
-                });
+              // --- NEW: Add the logout listener for the user dashboard ---
+              userUI.logoutButton.addActionListener(
+                  e -> {
+                    logout();
+                  });
+            }
+          } catch (NullPointerException ex) {
+            // loginUI.showError("Empty username or password."); // TODO: implement showError
+            System.err.println("Empty username or password.");
+          } catch (IllegalArgumentException ex) {
+            // loginUI.showError("Invalid username or password.");
+            System.err.println("Invalid username or password.");
+          } catch (Exception ex) {
+            // loginUI.showError("An error occurred during login.");
+            System.err.println("An error occurred during login.");
+            ex.printStackTrace();
           }
         });
   }
