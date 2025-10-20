@@ -78,7 +78,6 @@ public class UIUtils {
               Retrieve.showComplaints(tableBody, username);
               cardLayout.show(panel, "user");
 
-              // --- NEW: Add the logout listener for the user dashboard ---
               userUI.logoutButton.addActionListener(
                   e -> {
                     logout();
