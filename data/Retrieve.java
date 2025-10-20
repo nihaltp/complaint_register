@@ -1,15 +1,13 @@
 package data;
 
+import auth.Auth;
+import db.DBconnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-
 import javax.swing.JPanel;
-
-import auth.Auth;
-import db.DBconnection;
 import ui.helpers.RowHelper;
 
 public class Retrieve {
@@ -50,7 +48,7 @@ public class Retrieve {
    */
   public static void showComplaints(JPanel body, String username) {
     // add complaints to body using RowHelper.addRow(...)
-    if (!Auth.isUser(username)) {
+    if (!Auth.isUser(username) && !Auth.isAdmin(username)) {
       // user not found
       throw new IllegalArgumentException("User not found: " + username);
     }
