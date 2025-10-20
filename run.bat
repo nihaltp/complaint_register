@@ -1,6 +1,9 @@
 @echo off
 setlocal enabledelayedexpansion
 
+:: Run style formatter
+cmd /c "mvn spotless:apply"
+
 echo Compiling sources...
 
 REM Create the bin directory if it doesn't exist
