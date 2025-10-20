@@ -1,6 +1,7 @@
 package ui;
 
 import auth.Auth;
+import data.Store;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import javax.swing.BorderFactory;
@@ -92,6 +93,7 @@ public class ComplaintUI {
       priorityBox.addActionListener(
           e -> {
             priority = (String) priorityBox.getSelectedItem();
+            Store.updatePriority(ID, priority);
           });
       topPanel.add(priorityBox, BorderLayout.EAST);
     }

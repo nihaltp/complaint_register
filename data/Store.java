@@ -12,7 +12,18 @@ public class Store {
    */
   public static void saveComplaint(
       String username, String subject, String description, String priority, int ID) {
-    // Store the data to the database
+    // TODO: Store the data to the database
+    return;
+  }
+
+  /**
+   * Updates the priority of a complaint with the given ID in the database.
+   *
+   * @param ID the ID of the complaint to be updated
+   * @param priority the new priority of the complaint
+   */
+  public static void updatePriority(int ID, String priority) {
+    // TODO: Update the priority of the complaint with the given ID in the database
     return;
   }
 }
