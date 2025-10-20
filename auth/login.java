@@ -27,10 +27,10 @@ public class login {
         } // returns true if a record exists with matching username and password
       }
     } catch (SQLException e) {
-      System.err.println("Error checking user credentials:");
+      System.err.println("Error checking user credentials (admin):");
       e.printStackTrace();
     }
-    sql = "SELECT 1 FROM users WHERE username = ?";
+    sql = "SELECT 1 FROM users WHERE username = ? AND password = ?";
     try (Connection conn = DBconnection.getConnection();
         PreparedStatement ps = conn.prepareStatement(sql)) {
       ps.setString(1, username);
@@ -41,7 +41,7 @@ public class login {
         } // returns true if a record exists with matching username and password
       }
     } catch (SQLException e) {
-      System.err.println("Error checking user credentials:");
+      System.err.println("Error checking user credentials (user):");
       e.printStackTrace();
     }
     return found;
