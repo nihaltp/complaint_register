@@ -1,6 +1,9 @@
 @echo off
 setlocal enabledelayedexpansion
 
+:: Run style formatter
+cmd /c "mvn spotless:apply"
+
 :: Create bin directory if missing
 if not exist bin mkdir bin
 
