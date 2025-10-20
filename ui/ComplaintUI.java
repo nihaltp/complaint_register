@@ -1,6 +1,7 @@
 package ui;
 
 import auth.Auth;
+import data.Retrieve;
 import data.Store;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -44,19 +45,27 @@ public class ComplaintUI {
   String complainer;
 
   /**
-   * Show the complain details
+   * Show the complaint details
    *
    * @param ID the id of the complaint
    */
   public ComplaintUI(int ID) {
-    // --- Your original variable declarations and hardcoded data ---
-    priority = "new";
-    subject = "sample subject";
-    description =
-        "Sample description, should be updated with backed to retrive from the database\n";
-    description +=
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
-    complainer = "Anonymous";
+    try {
+      String[] data = Retrieve.getComplaint(ID).toArray(new String[0]);
+      priority = (data.length > 0) ? data[0] : "new";
+      subject = (data.length > 1) ? data[1] : "Error retrieving complaint";
+      description = (data.length > 2) ? data[2] : "Error retrieving complaint details.";
+      complainer = (data.length > 3) ? data[3] : "Error retrieving complainer";
+      if (data.length < 4) {
+        System.err.println("Incomplete complaint data retrieved.");
+      }
+    } catch (Exception e) {
+      priority = "new";
+      subject = "Error retrieving complaint";
+      description = "An error occurred while retrieving the complaint details.";
+      complainer = "Unknown";
+      System.err.println("An error occurred while retrieving the complaint details: " + e);
+    }
 
     // --- UI Component Initialization ---
     backButton = new JButton("← BACK");
@@ -87,7 +96,8 @@ public class ComplaintUI {
     topPanel.add(backButton, BorderLayout.WEST);
 
     if (Auth.isAdmin(UIUtils.username)) {
-      priorityBox = new JComboBox(new String[] {"new", "low", "medium", "high", "resolved"});
+      priorityBox =
+          new JComboBox<String>(new String[] {"new", "low", "medium", "high", "resolved"});
       priorityBox.setSelectedItem(priority);
       priorityBox.setEditable(false);
       priorityBox.addActionListener(
