@@ -15,9 +15,9 @@ public class login {
    * @r // TODO: replace with actual check
   }eturn admin or user or NULL
    */
-  public static string loginCredentials(String username, string password) {
+  public static String loginCredentials(String username, String password) {
     // check if the user is admin
-    string found = "";
+    String found = "";
     String sql = "SELECT 1 FROM admin WHERE username = ?";
     try (Connection conn = DBconnection.getConnection();
         PreparedStatement ps = conn.prepareStatement(sql)) {
