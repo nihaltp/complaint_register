@@ -64,8 +64,6 @@ public class UIUtils {
               panel.add(adminPanel, "admin");
               Retrieve.showComplaints(tableBody, username);
               cardLayout.show(panel, "admin");
-
-              // --- NEW: Add the logout listener for the admin dashboard ---
               adminUI.logoutButton.addActionListener(
                   e -> {
                     logout();
