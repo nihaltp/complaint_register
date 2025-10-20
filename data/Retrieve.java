@@ -1,6 +1,11 @@
 package data;
 
 import auth.Auth;
+import db.DBconnection;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 import javax.swing.JPanel;
 import ui.helpers.RowHelper;
@@ -13,8 +18,25 @@ public class Retrieve {
    */
   public static int getNewID() {
     // return new ID from database
-    int ID = 99; // TODO: get actual ID from database
-    return ID;
+    int newID = 0;
+    String sql = "SELECT MAX(id) FROM complaints";
+
+    try (Connection conn = DBconnection.getConnection();
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ResultSet rs = ps.executeQuery()) {
+
+      if (rs.next()) {
+        newID = rs.getInt(1); // max current id
+      }
+
+      newID++; // increment for new unique id
+
+    } catch (SQLException e) {
+      System.err.println("Error retrieving new complaint ID");
+      e.printStackTrace();
+    }
+
+    return newID;
   }
 
   /**
@@ -24,23 +46,37 @@ public class Retrieve {
    * @param body the panel to add the complaints to
    * @param username the username of the user who is viewing the complaints
    */
-  public static void showComplaints(JPanel body, String username) {
+  public static void showComplaints(JPanel body, String username, String password) {
     // add complaints to body using RowHelper.addRow(...)
-    if (!Auth.isUser(username)) {
+    if (!Auth.isUser(username, password)) {
       // user not found
       throw new IllegalArgumentException("User not found: " + username);
     }
-    if (Auth.isAdmin(username)) {
-      // show all complaints
-      // TODO: get all complaints from database
-      RowHelper.addRow(body, "Subject 1", "High", 1);
-      RowHelper.addRow(body, "Subject 2", "Low", 2);
-      RowHelper.addRow(body, "Subject 3", "Medium", 3);
+    String sql;
+    if (Auth.isAdmin(username, password)) {
+      // Admin: retrieve all complaints
+      sql = "SELECT subject, priority, id FROM complaints";
     } else {
-      // show only user's complaints
-      // TODO: get user's complaints from database
-      RowHelper.addRow(body, "Subject 1", "High", 1);
-      RowHelper.addRow(body, "Subject 2", "Low", 2);
+      // Normal user: retrieve only user's complaints
+      sql = "SELECT subject, priority, id FROM complaints WHERE username = ?";
+    }
+    try (Connection conn = DBconnection.getConnection();
+        PreparedStatement ps = conn.prepareStatement(sql)) {
+      if (!Auth.isAdmin(username, password)) {
+        ps.setString(1, username);
+      }
+      try (ResultSet rs = ps.executeQuery()) {
+        int rowIndex = 0;
+        while (rs.next()) {
+          String subject = rs.getString("subject");
+          String priority = rs.getString("priority");
+          int id = rs.getInt("id");
+          RowHelper.addRow(body, subject, priority, id);
+        }
+      }
+    } catch (SQLException e) {
+      System.err.println("Error retrieving complaints:");
+      e.printStackTrace();
     }
   }
 
@@ -48,17 +84,37 @@ public class Retrieve {
    * Retrieves a complaint from the database using the given ID.
    *
    * @param ID the ID of the complaint to be retrieved
-   * @return a list of strings containing the complaint details, in the order of priority, subject, description, and complainer
+   * @return a list of strings containing the complaint details, in the order of priority, subject,
+   *     description, and complainer
    */
   public static List<String> getComplaint(int ID) {
     // TODO: retrieve complaint from database using ID
-    String priority = "new"; // TODO: get actual priority from database
-    String subject = "sample subject"; // TODO: get actual subject from database
-    String description =
-        "Sample description, should be updated with backed to retrive from the database\n";
-    description +=
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."; // TODO: get actual description from database
-    String complainer = "Anonymous"; // TODO: get actual complainer from database
+    String priority = "";
+    String subject = "";
+    String description = "";
+    String complainer = "";
+
+    String sql = "SELECT priority, subject, description, username FROM complaints WHERE id = ?";
+
+    try (Connection conn = DBconnection.getConnection();
+        PreparedStatement ps = conn.prepareStatement(sql)) {
+
+      ps.setInt(1, ID);
+      try (ResultSet rs = ps.executeQuery()) {
+        if (rs.next()) {
+          priority = rs.getString("priority");
+          subject = rs.getString("subject");
+          description = rs.getString("description");
+          complainer = rs.getString("username");
+        } else {
+          System.err.println("No complaint found with ID: " + ID);
+        }
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+      // Handle exception as needed
+    }
+
     return List.of(priority, subject, description, complainer);
   }
 }
