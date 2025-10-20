@@ -107,8 +107,22 @@ public class LoginUI {
         return username;
     }
 
-    /**
-     * Clears the username and password fields by setting their text to the placeholder
+  /**
+   * Retrieves the password from the login form, ignoring the placeholder.
+   *
+   * @return The username entered by the user, or an empty string if the user did not enter a
+   *     username.
+   */
+  public String getPassword() {
+    String pwd = new String(password.getPassword());
+    if (pwd.equals(PASSWORD_PLACEHOLDER)) {
+      return "";
+    }
+    return pwd;
+  }
+
+  /**
+   * Clears the username and password fields by setting their text to the placeholder
      * and their foreground color to gray. If the password field is a JPasswordField, it
      * also sets the echo character to 0.
      */
