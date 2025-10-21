@@ -88,6 +88,7 @@ public class UIUtils {
             }
           } catch (Exception ex) {
             loginUI.showError("An error occurred during login.");
+            System.err.println("An error occurred during login:");
             ex.printStackTrace();
           }
         });
@@ -132,6 +133,9 @@ public class UIUtils {
             subject = subject.substring("Subject: ".length());
           }
           String description = cUI.descriptionArea.getText();
+          if (subject == "" || description == "") {
+            return;
+          }
           String priority = "";
 
           Store.saveComplaint(username, subject, description, priority, ID);
