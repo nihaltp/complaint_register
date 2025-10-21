@@ -6,6 +6,7 @@ import data.Retrieve;
 import data.Store;
 import java.awt.CardLayout;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import ui.helpers.RowHelper;
@@ -108,23 +109,24 @@ public class UIUtils {
         b -> {
           backToDashboard(username);
         });
-    
+
     // Add logic for the delete button
     if (cUI.deleteButton != null) {
-      cUI.deleteButton.addActionListener(e -> {
-        // 1. Delete from database
-        Store.deleteComplaint(ID);
+      cUI.deleteButton.addActionListener(
+          e -> {
+            // 1. Delete from database
+            Store.deleteComplaint(ID);
 
-        // 2. Refresh the dashboard view
-        tableBody.removeAll();
-        RowHelper.resetSlNo();
-        Retrieve.showComplaints(tableBody, username);
-        tableBody.revalidate();
-        tableBody.repaint();
+            // 2. Refresh the dashboard view
+            tableBody.removeAll();
+            RowHelper.resetSlNo();
+            Retrieve.showComplaints(tableBody, username);
+            tableBody.revalidate();
+            tableBody.repaint();
 
-        // 3. Go back to the dashboard
-        backToDashboard(username);
-      });
+            // 3. Go back to the dashboard
+            backToDashboard(username);
+          });
     }
   }
 
@@ -137,10 +139,10 @@ public class UIUtils {
    */
   public static void addComplaint() {
     int ID = Retrieve.getNewID();
-
     ComplaintUI cUI = new ComplaintUI(ID);
 
     JButton submitButton = new JButton("Submit");
+    JCheckBox anonymousCheckBox = new JCheckBox("Post Anonymously");
 
     submitButton.addActionListener(
         e -> {
@@ -149,17 +151,23 @@ public class UIUtils {
             subject = subject.substring("Subject: ".length());
           }
           String description = cUI.descriptionArea.getText();
-          String priority = "";
 
-          Store.saveComplaint(username, subject, description, priority, ID);
-          RowHelper.addRow(tableBody, subject, priority, ID);
+          Store.saveComplaint(
+              username, subject, description, "", ID, anonymousCheckBox.isSelected());
+
+          // Refresh the table to show the new complaint
+          tableBody.removeAll();
+          RowHelper.resetSlNo();
+          Retrieve.showComplaints(tableBody, username);
           tableBody.revalidate();
           tableBody.repaint();
+
           backToDashboard(username);
         });
 
     cUI.bottomPanel.remove(cUI.timeLabel);
     cUI.bottomPanel.remove(cUI.complainerLabel);
+    cUI.bottomPanel.add(anonymousCheckBox);
     cUI.bottomPanel.add(submitButton);
 
     JPanel cPanel = cUI.complaintUI;
@@ -182,7 +190,7 @@ public class UIUtils {
 
   public void logout() {
     cardLayout.show(panel, "login");
-    ui.helpers.RowHelper.resetSlNo(); // Reset serial number for new login
+    RowHelper.resetSlNo();
     loginUI.clearFields();
   }
 }

@@ -17,8 +17,28 @@ public class Store {
    */
   public static void saveComplaint(
       String username, String subject, String description, String priority, int ID) {
+    saveComplaint(username, subject, description, priority, ID, false); // Defaults to not anonymous
+  }
+
+  /**
+   * Saves a complaint to the database with an anonymity option.
+   *
+   * @param username - the username of the user who submitted the complaint
+   * @param subject - the subject of the complaint
+   * @param description - the description of the complaint
+   * @param priority - the priority of the complaint
+   * @param ID - the ID of the complaint
+   * @param isAnonymous - whether the complaint is anonymous
+   */
+  public static void saveComplaint(
+      String username,
+      String subject,
+      String description,
+      String priority,
+      int ID,
+      boolean isAnonymous) {
     String sql =
-        "INSERT INTO complaints (id, username, subject, description, priority) VALUES (?, ?, ?, ?, ?)";
+        "INSERT INTO complaints (id, username, subject, description, priority, anonymous) VALUES (?, ?, ?, ?, ?, ?)";
 
     try (Connection conn = DBconnection.getConnection();
         PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -28,6 +48,7 @@ public class Store {
       ps.setString(3, subject);
       ps.setString(4, description);
       ps.setString(5, priority);
+      ps.setBoolean(6, isAnonymous);
 
       ps.executeUpdate(); // execute the insert
 
@@ -59,12 +80,12 @@ public class Store {
       e.printStackTrace();
     }
   }
-  
+
   /**
    * Updates the subject and description of a complaint with the given ID.
    *
-   * @param ID          the ID of the complaint to be updated
-   * @param subject     the new subject of the complaint
+   * @param ID the ID of the complaint to be updated
+   * @param subject the new subject of the complaint
    * @param description the new description of the complaint
    */
   public static void updateComplaint(int ID, String subject, String description) {

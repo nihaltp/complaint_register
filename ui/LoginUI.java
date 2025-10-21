@@ -56,7 +56,7 @@ public class LoginUI {
 
     passwordPanel.add(passwordLabel);
     passwordPanel.add(password);
-    
+
     // Create and add the error label
     errorLabel = new JLabel(" ");
     errorLabel.setForeground(Color.RED);
@@ -121,17 +121,17 @@ public class LoginUI {
   public void showError(String message) {
     errorLabel.setText(message);
   }
-  
+
   // Method to clear the error message
   public void clearError() {
-      errorLabel.setText(" ");
+    errorLabel.setText(" ");
   }
 
   /**
    * Retrieves the username from the login form, ignoring the placeholder.
    *
    * @return The username entered by the user, or an empty string if the user did not enter a
-   * username.
+   *     username.
    */
   public String getUsername() {
     String username = usernameField.getText();
@@ -145,7 +145,7 @@ public class LoginUI {
    * Retrieves the password from the login form, ignoring the placeholder.
    *
    * @return The password entered by the user, or an empty string if the user did not enter a
-   * password.
+   *     password.
    */
   public String getPassword() {
     String pwd = new String(password.getPassword());

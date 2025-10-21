@@ -10,6 +10,7 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -25,7 +26,7 @@ public class ComplaintUI {
   JButton backButton;
   JButton editButton;
   JButton saveButton;
-  JButton deleteButton; // Add this
+  JButton deleteButton;
 
   JComboBox<String> priorityBox;
 
@@ -39,21 +40,26 @@ public class ComplaintUI {
   JScrollPane descScroll;
 
   String complainer;
+  JCheckBox anonymousCheckBox;
 
   public ComplaintUI(int ID) {
     String priority, subject, description;
+    boolean isAnonymous = false;
+
     try {
       String[] data = Retrieve.getComplaint(ID).toArray(new String[0]);
       priority = data.length > 0 ? data[0] : "new";
       subject = data.length > 1 ? data[1] : "Error retrieving complaint";
       description = data.length > 2 ? data[2] : "Error retrieving complaint details.";
       complainer = data.length > 3 ? data[3] : "Error retrieving complainer";
+      if (data.length > 4) {
+        isAnonymous = Boolean.parseBoolean(data[4]);
+      }
     } catch (Exception e) {
       priority = "new";
       subject = "Error";
       description = "Error";
       complainer = "Unknown";
-      System.err.println("An error occurred while retrieving the complaint details: " + e);
     }
 
     // --- UI Component Initialization ---
@@ -79,14 +85,18 @@ public class ComplaintUI {
         new JLabel(
             java.time.LocalTime.now()
                 .format(java.time.format.DateTimeFormatter.ofPattern("HH:mm:ss")));
-    complainerLabel = new JLabel("by: " + complainer);
+
+    if (isAnonymous && Auth.isAdmin(UIUtils.username)) {
+      complainerLabel = new JLabel("by: Anonymous");
+    } else {
+      complainerLabel = new JLabel("by: " + complainer);
+    }
 
     topPanel = new JPanel(new BorderLayout());
     topPanel.add(backButton, BorderLayout.WEST);
 
     if (Auth.isAdmin(UIUtils.username)) {
-      priorityBox =
-          new JComboBox<>(new String[] {"new", "low", "medium", "high", "resolved"});
+      priorityBox = new JComboBox<>(new String[] {"new", "low", "medium", "high", "resolved"});
       priorityBox.setSelectedItem(priority);
       priorityBox.addActionListener(
           e -> {
@@ -95,26 +105,25 @@ public class ComplaintUI {
       topPanel.add(priorityBox, BorderLayout.EAST);
     }
 
-    // 2. Header panel for ID and Subject
     JPanel headerPanel = new JPanel();
     headerPanel.setLayout(new BoxLayout(headerPanel, BoxLayout.Y_AXIS));
     headerPanel.add(idLabel);
     headerPanel.add(Box.createRigidArea(new Dimension(0, 5)));
     headerPanel.add(subjectField);
 
-    // 3. Bottom panel for timestamp and complainer
     bottomPanel = new JPanel();
     bottomPanel.setLayout(new BoxLayout(bottomPanel, BoxLayout.X_AXIS));
     bottomPanel.add(timeLabel);
     bottomPanel.add(Box.createHorizontalGlue());
     bottomPanel.add(complainerLabel);
 
-    // Add Edit and Save buttons for the user who created the complaint
+    anonymousCheckBox = new JCheckBox("Post Anonymously");
+
     if (!Auth.isAdmin(UIUtils.username) && UIUtils.username.equals(complainer)) {
       bottomPanel.add(Box.createRigidArea(new Dimension(10, 0)));
       bottomPanel.add(editButton);
       bottomPanel.add(saveButton);
-      bottomPanel.add(deleteButton); 
+      bottomPanel.add(deleteButton);
       saveButton.setVisible(false);
 
       editButton.addActionListener(
@@ -135,15 +144,12 @@ public class ComplaintUI {
           });
     }
 
-    // 4. Assemble the main panel using BorderLayout
     complaintUI = new JPanel(new BorderLayout(10, 10));
     complaintUI.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
     complaintUI.add(topPanel, BorderLayout.NORTH);
 
-    // The header goes in a new panel to group it
     JPanel centerContent = new JPanel(new BorderLayout(0, 10));
     centerContent.add(headerPanel, BorderLayout.NORTH);
-    // The description scroll pane goes in the CENTER to make it expand
     centerContent.add(descScroll, BorderLayout.CENTER);
 
     complaintUI.add(centerContent, BorderLayout.CENTER);

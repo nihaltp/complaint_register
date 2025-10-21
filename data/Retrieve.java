@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JPanel;
 import ui.helpers.RowHelper;
@@ -66,7 +67,6 @@ public class Retrieve {
         ps.setString(1, username);
       }
       try (ResultSet rs = ps.executeQuery()) {
-        int rowIndex = 0;
         while (rs.next()) {
           String subject = rs.getString("subject");
           String priority = rs.getString("priority");
@@ -84,17 +84,12 @@ public class Retrieve {
    * Retrieves a complaint from the database using the given ID.
    *
    * @param ID the ID of the complaint to be retrieved
-   * @return a list of strings containing the complaint details, in the order of priority, subject,
-   *     description, and complainer
+   * @return a list of strings containing the complaint details
    */
   public static List<String> getComplaint(int ID) {
-    // TODO: retrieve complaint from database using ID
-    String priority = "";
-    String subject = "";
-    String description = "";
-    String complainer = "";
-
-    String sql = "SELECT priority, subject, description, username FROM complaints WHERE id = ?";
+    List<String> complaintData = new ArrayList<>();
+    String sql =
+        "SELECT priority, subject, description, username, anonymous FROM complaints WHERE id = ?";
 
     try (Connection conn = DBconnection.getConnection();
         PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -102,19 +97,16 @@ public class Retrieve {
       ps.setInt(1, ID);
       try (ResultSet rs = ps.executeQuery()) {
         if (rs.next()) {
-          priority = rs.getString("priority");
-          subject = rs.getString("subject");
-          description = rs.getString("description");
-          complainer = rs.getString("username");
-        } else {
-          System.err.println("No complaint found with ID: " + ID);
+          complaintData.add(rs.getString("priority"));
+          complaintData.add(rs.getString("subject"));
+          complaintData.add(rs.getString("description"));
+          complaintData.add(rs.getString("username"));
+          complaintData.add(String.valueOf(rs.getBoolean("anonymous")));
         }
       }
     } catch (SQLException e) {
       e.printStackTrace();
-      // Handle exception as needed
     }
-
-    return List.of(priority, subject, description, complainer);
+    return complaintData;
   }
 }
