@@ -79,7 +79,6 @@ public class ComplaintUI {
     subjectField = new javax.swing.JTextField("Subject: " + subject);
     subjectField.setEditable(!Auth.isAdmin(UIUtils.username));
 
-    // The multi-line description area
     descriptionArea = new JTextArea(description);
     descriptionArea.setLineWrap(true);
     descriptionArea.setWrapStyleWord(true);
