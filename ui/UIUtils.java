@@ -114,23 +114,24 @@ public class UIUtils {
         b -> {
           backToDashboard(username);
         });
-    
+
     // Add logic for the delete button
     if (cUI.deleteButton != null) {
-      cUI.deleteButton.addActionListener(e -> {
-        // 1. Delete from database
-        Store.deleteComplaint(ID);
+      cUI.deleteButton.addActionListener(
+          e -> {
+            // 1. Delete from database
+            Store.deleteComplaint(ID);
 
-        // 2. Refresh the dashboard view
-        tableBody.removeAll();
-        RowHelper.resetSlNo();
-        Retrieve.showComplaints(tableBody, username);
-        tableBody.revalidate();
-        tableBody.repaint();
+            // 2. Refresh the dashboard view
+            tableBody.removeAll();
+            RowHelper.resetSlNo();
+            Retrieve.showComplaints(tableBody, username);
+            tableBody.revalidate();
+            tableBody.repaint();
 
-        // 3. Go back to the dashboard
-        backToDashboard(username);
-      });
+            // 3. Go back to the dashboard
+            backToDashboard(username);
+          });
     }
   }
 
@@ -149,6 +150,7 @@ public class UIUtils {
     cUI.descriptionArea.setEditable(true);
 
     JButton submitButton = new JButton("Submit");
+    cUI.anonymousButton.setVisible(true); // Show the anonymous button
 
     submitButton.addActionListener(
         e -> {
@@ -169,9 +171,29 @@ public class UIUtils {
           backToDashboard(username);
         });
 
+    cUI.anonymousButton.addActionListener(
+        e -> {
+          String subject = cUI.subjectField.getText();
+          if (subject.startsWith("Subject: ")) {
+            subject = subject.substring("Subject: ".length());
+          }
+          String description = cUI.descriptionArea.getText();
+          if (subject == "" || description == "") {
+            return;
+          }
+          String priority = "";
+
+          Store.saveComplaint("anonymous", subject, description, priority, ID);
+          RowHelper.addRow(tableBody, subject, priority, ID);
+          tableBody.revalidate();
+          tableBody.repaint();
+          backToDashboard(username);
+        });
+
     cUI.bottomPanel.remove(cUI.timeLabel);
     cUI.bottomPanel.remove(cUI.complainerLabel);
     cUI.bottomPanel.add(submitButton);
+    cUI.bottomPanel.add(cUI.anonymousButton); // Add anonymous button to the panel
 
     JPanel cPanel = cUI.complaintUI;
     panel.add(cPanel, "complaint");
@@ -195,5 +217,9 @@ public class UIUtils {
     cardLayout.show(panel, "login");
     ui.helpers.RowHelper.resetSlNo(); // Reset serial number for new login
     loginUI.clearFields();
+  }
+
+  public static String getUsername() {
+    return username;
   }
 }

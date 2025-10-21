@@ -58,12 +58,13 @@ public class Retrieve {
       sql = "SELECT subject, priority, id FROM complaints";
     } else {
       // Normal user: retrieve only user's complaints
-      sql = "SELECT subject, priority, id FROM complaints WHERE username = ?";
+      sql = "SELECT subject, priority, id FROM complaints WHERE username = ? OR submitted_by = ?";
     }
     try (Connection conn = DBconnection.getConnection();
         PreparedStatement ps = conn.prepareStatement(sql)) {
       if (!Auth.isAdmin(username)) {
         ps.setString(1, username);
+        ps.setString(2, username);
       }
       try (ResultSet rs = ps.executeQuery()) {
         int rowIndex = 0;
