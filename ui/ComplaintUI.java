@@ -16,7 +16,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import ui.helpers.RowHelper;
 
 public class ComplaintUI {
   JPanel complaintUI;
@@ -27,6 +26,7 @@ public class ComplaintUI {
   JButton editButton;
   JButton saveButton;
   JButton deleteButton;
+  JButton anonymousButton; // Add this
 
   JComboBox<String> priorityBox;
 
@@ -63,6 +63,7 @@ public class ComplaintUI {
     saveButton = new JButton("Save");
     deleteButton = new JButton("Delete");
     deleteButton.setForeground(Color.RED);
+    anonymousButton = new JButton("Submit Anonymously"); // Add this
 
     idLabel = new JLabel("#" + ID);
 
@@ -91,8 +92,6 @@ public class ComplaintUI {
       priorityBox.addActionListener(
           e -> {
             Store.updatePriority(ID, (String) priorityBox.getSelectedItem());
-            String updated_priority = (String) priorityBox.getSelectedItem();
-            RowHelper.update(ID, updated_priority);
           });
       topPanel.add(priorityBox, BorderLayout.EAST);
     }
