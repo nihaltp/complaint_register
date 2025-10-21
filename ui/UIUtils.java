@@ -59,30 +59,34 @@ public class UIUtils {
             if (status.equals("admin")) {
               // --- ADMIN LOGIN ---
               adminUI = new AdminDashboard();
-              adminPanel = adminUI.panel;
-              tableBody = adminUI.tableBody;
+              adminPanel = adminUI.getPanel();
+              tableBody = adminUI.getTableBody();
               panel.add(adminPanel, "admin");
               Retrieve.showComplaints(tableBody, username);
               cardLayout.show(panel, "admin");
 
-              adminUI.logoutButton.addActionListener(
-                  e -> {
-                    logout();
-                  });
+              adminUI
+                  .getLogoutButton()
+                  .addActionListener(
+                      e -> {
+                        logout();
+                      });
 
             } else if (status.equals("user")) {
               // --- NORMAL USER LOGIN ---
               userUI = new UserDashboard(username);
-              userPanel = userUI.panel;
-              tableBody = userUI.tableBody;
+              userPanel = userUI.getPanel();
+              tableBody = userUI.getTableBody();
               panel.add(userPanel, "user");
               Retrieve.showComplaints(tableBody, username);
               cardLayout.show(panel, "user");
 
-              userUI.logoutButton.addActionListener(
-                  e -> {
-                    logout();
-                  });
+              userUI
+                  .getLogoutButton()
+                  .addActionListener(
+                      e -> {
+                        logout();
+                      });
             } else {
               loginUI.showError("Invalid username or password.");
             }

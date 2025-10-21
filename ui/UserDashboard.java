@@ -1,75 +1,68 @@
 package ui;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.GridLayout;
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
+import java.awt.FlowLayout; 
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.border.EmptyBorder;
 
 public class UserDashboard {
-  JPanel panel;
-  JPanel topPanel;
-  JPanel centerPanel;
-  JPanel tableHeader;
-  JPanel tableBody;
-  JPanel header;
+    public JPanel panel;
+    public JPanel tableBody;
+    public JButton logoutButton;
 
-  JScrollPane scrollPane;
+    private JPanel topLeftPanel; 
+    private JLabel userNameLabel;
+    private JButton addComplaintButton;
 
-  JLabel userNameLabel;
+    private Dashboard dashboard; 
 
-  JButton logoutButton;
-  JButton addComplaint;
+    public UserDashboard(String username) {
+        dashboard = new Dashboard(); 
 
-  public UserDashboard(String username) {
-    userNameLabel = new JLabel(username);
+        
+        this.panel = dashboard.getPanel();
+        this.tableBody = dashboard.getTableBody();
+        this.logoutButton = dashboard.getLogoutButton();
 
-    logoutButton = new JButton("LOGOUT");
+        
+        userNameLabel = new JLabel(username);
 
-    addComplaint = new JButton();
-    addComplaint.setText("Add a new Complaint");
-    addComplaint.setPreferredSize(new Dimension(60, 20));
-    addComplaint.setMaximumSize(new Dimension(60, 20));
+        addComplaintButton = new JButton("Add a new Complaint");
+        
+        addComplaintButton.setPreferredSize(new Dimension(180, 25)); 
+        addComplaintButton.setMaximumSize(new Dimension(180, 25));
 
-    addComplaint.addActionListener(
-        e -> {
-          UIUtils.addComplaint();
-        });
+        addComplaintButton.addActionListener(
+                e -> {
+                    UIUtils.addComplaint();
+                });
 
-    topPanel = new JPanel(new BorderLayout());
-    topPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
-    topPanel.add(userNameLabel, BorderLayout.WEST);
-    topPanel.add(addComplaint);
-    topPanel.add(logoutButton, BorderLayout.EAST);
+        
+        topLeftPanel = new JPanel(new FlowLayout(FlowLayout.LEFT)); 
+        topLeftPanel.add(userNameLabel);
+        topLeftPanel.add(addComplaintButton);
 
-    tableHeader = new JPanel(new GridLayout(1, 4));
-    tableHeader.add(new JLabel("sl.no"));
-    tableHeader.add(new JLabel("Subject"));
-    tableHeader.add(new JLabel("Priority"));
-    tableHeader.add(new JLabel("ID"));
-    tableHeader.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
+        
+        dashboard.getTopPanel().add(topLeftPanel, BorderLayout.WEST);
+    }
 
-    tableBody = new JPanel();
-    tableBody.setLayout(new BoxLayout(tableBody, BoxLayout.Y_AXIS));
+    
+    public JPanel getPanel() {
+        return panel;
+    }
 
-    scrollPane = new JScrollPane(tableBody);
-    scrollPane.setPreferredSize(new Dimension(480, 300));
+    public JPanel getTableBody() {
+        return tableBody;
+    }
 
-    header = new JPanel();
-    header.setLayout(new BorderLayout());
-    header.add(topPanel, BorderLayout.NORTH);
-    header.add(tableHeader, BorderLayout.SOUTH);
+    public JButton getLogoutButton() {
+        return logoutButton;
+    }
 
-    panel = new JPanel();
-    panel.setBorder(new EmptyBorder(5, 5, 5, 5));
-    panel.setLayout(new BorderLayout());
-    panel.add(header, BorderLayout.NORTH);
-    panel.add(scrollPane, BorderLayout.SOUTH);
-  }
+    
+    public JButton getAddComplaintButton() {
+        return addComplaintButton;
+    }
 }
