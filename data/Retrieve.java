@@ -89,13 +89,12 @@ public class Retrieve {
    *     description, and complainer
    */
   public static List<String> getComplaint(int ID) {
-    // TODO: retrieve complaint from database using ID
     String priority = "";
     String subject = "";
     String description = "";
     String complainer = "";
 
-    String sql = "SELECT priority, subject, description, username FROM complaints WHERE id = ?";
+    String sql = "SELECT priority, subject, description, submitted_by FROM complaints WHERE id = ?";
 
     try (Connection conn = DBconnection.getConnection();
         PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -106,7 +105,7 @@ public class Retrieve {
           priority = rs.getString("priority");
           subject = rs.getString("subject");
           description = rs.getString("description");
-          complainer = rs.getString("username");
+          complainer = rs.getString("submitted_by");
         } else {
           System.err.println("No complaint found with ID: " + ID);
         }
