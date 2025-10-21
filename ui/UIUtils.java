@@ -154,40 +154,12 @@ public class UIUtils {
 
     submitButton.addActionListener(
         e -> {
-          String subject = cUI.subjectField.getText();
-          if (subject.startsWith("Subject: ")) {
-            subject = subject.substring("Subject: ".length());
-          }
-          String description = cUI.descriptionArea.getText();
-          if (subject == "" || description == "") {
-            return;
-          }
-          String priority = "";
-
-          Store.saveComplaint(username, subject, description, priority, ID);
-          RowHelper.addRow(tableBody, subject, priority, ID);
-          tableBody.revalidate();
-          tableBody.repaint();
-          backToDashboard(username);
+          submit(false, ID, cUI);
         });
 
     cUI.anonymousButton.addActionListener(
         e -> {
-          String subject = cUI.subjectField.getText();
-          if (subject.startsWith("Subject: ")) {
-            subject = subject.substring("Subject: ".length());
-          }
-          String description = cUI.descriptionArea.getText();
-          if (subject == "" || description == "") {
-            return;
-          }
-          String priority = "";
-
-          Store.saveComplaint("anonymous", subject, description, priority, ID);
-          RowHelper.addRow(tableBody, subject, priority, ID);
-          tableBody.revalidate();
-          tableBody.repaint();
-          backToDashboard(username);
+          submit(true, ID, cUI);
         });
 
     cUI.bottomPanel.remove(cUI.timeLabel);
@@ -221,5 +193,23 @@ public class UIUtils {
 
   public static String getUsername() {
     return username;
+  }
+
+  public static void submit(boolean isAnon, int ID, ComplaintUI UI) {
+    String subject = UI.subjectField.getText();
+    if (subject.startsWith("Subject: ")) {
+      subject = subject.substring("Subject: ".length());
+    }
+    String description = UI.descriptionArea.getText();
+    if (subject == "" || description == "") {
+      return;
+    }
+    String priority = "";
+
+    Store.saveComplaint((isAnon) ? "anonymous" : username, subject, description, priority, ID);
+    RowHelper.addRow(tableBody, subject, priority, ID);
+    tableBody.revalidate();
+    tableBody.repaint();
+    backToDashboard(username);
   }
 }
