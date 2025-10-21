@@ -65,7 +65,7 @@ public class ComplaintUI {
 
     idLabel = new JLabel("#" + ID);
 
-    subjectField = new JTextField(subject);
+    subjectField = new JTextField("Subject: " + subject);
     subjectField.setEditable(false);
 
     descriptionArea = new JTextArea(description);
