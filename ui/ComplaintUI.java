@@ -25,6 +25,8 @@ public class ComplaintUI {
   JPanel bottomPanel;
 
   JButton backButton;
+  JButton editButton;
+  JButton saveButton;
 
   JComboBox<String> priorityBox;
 
@@ -69,6 +71,8 @@ public class ComplaintUI {
 
     // --- UI Component Initialization ---
     backButton = new JButton("← BACK");
+    editButton = new JButton("Edit");
+    saveButton = new JButton("Save");
     idLabel = new JLabel("#" + ID);
 
     // --- FIX: Use a JTextField for the single-line subject ---
@@ -121,6 +125,31 @@ public class ComplaintUI {
     bottomPanel.add(timeLabel);
     bottomPanel.add(Box.createHorizontalGlue()); // Pushes complainer to the right
     bottomPanel.add(complainerLabel);
+
+    // Add Edit and Save buttons for the user who created the complaint
+    if (!Auth.isAdmin(UIUtils.username) && UIUtils.username.equals(complainer)) {
+      bottomPanel.add(Box.createRigidArea(new Dimension(10, 0)));
+      bottomPanel.add(editButton);
+      bottomPanel.add(saveButton);
+      saveButton.setVisible(false); // Hide save button initially
+
+      editButton.addActionListener(
+          e -> {
+            subjectField.setEditable(true);
+            descriptionArea.setEditable(true);
+            editButton.setVisible(false);
+            saveButton.setVisible(true);
+          });
+
+      saveButton.addActionListener(
+          e -> {
+            Store.updateComplaint(ID, subjectField.getText(), descriptionArea.getText());
+            subjectField.setEditable(false);
+            descriptionArea.setEditable(false);
+            editButton.setVisible(true);
+            saveButton.setVisible(false);
+          });
+    }
 
     // 4. Assemble the main panel using BorderLayout
     complaintUI = new JPanel(new BorderLayout(10, 10));

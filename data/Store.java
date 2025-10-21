@@ -60,4 +60,28 @@ public class Store {
       e.printStackTrace();
     }
   }
+  /**
+   * Updates the subject and description of a complaint with the given ID.
+   *
+   * @param ID          the ID of the complaint to be updated
+   * @param subject     the new subject of the complaint
+   * @param description the new description of the complaint
+   */
+  public static void updateComplaint(int ID, String subject, String description) {
+    String sql = "UPDATE complaints SET subject = ?, description = ? WHERE id = ?";
+
+    try (Connection conn = DBconnection.getConnection();
+        PreparedStatement ps = conn.prepareStatement(sql)) {
+
+      ps.setString(1, subject);
+      ps.setString(2, description);
+      ps.setInt(3, ID);
+
+      ps.executeUpdate(); // Execute the update statement
+
+    } catch (SQLException e) {
+      System.err.println("Error updating complaint:");
+      e.printStackTrace();
+    }
+  }
 }
