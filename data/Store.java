@@ -44,7 +44,6 @@ public class Store {
    * @param priority the new priority of the complaint
    */
   public static void updatePriority(int ID, String priority) {
-    // TODO: Update the priority of the complaint with the given ID in the database
     String sql = "UPDATE complaints SET priority = ? WHERE id = ?";
 
     try (Connection conn = DBconnection.getConnection();
@@ -60,6 +59,7 @@ public class Store {
       e.printStackTrace();
     }
   }
+  
   /**
    * Updates the subject and description of a complaint with the given ID.
    *
@@ -81,6 +81,23 @@ public class Store {
 
     } catch (SQLException e) {
       System.err.println("Error updating complaint:");
+      e.printStackTrace();
+    }
+  }
+
+  /**
+   * Deletes a complaint from the database.
+   *
+   * @param ID the ID of the complaint to delete
+   */
+  public static void deleteComplaint(int ID) {
+    String sql = "DELETE FROM complaints WHERE id = ?";
+    try (Connection conn = DBconnection.getConnection();
+        PreparedStatement ps = conn.prepareStatement(sql)) {
+      ps.setInt(1, ID);
+      ps.executeUpdate();
+    } catch (SQLException e) {
+      System.err.println("Error deleting complaint:");
       e.printStackTrace();
     }
   }
