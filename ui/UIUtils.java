@@ -145,6 +145,8 @@ public class UIUtils {
     int ID = Retrieve.getNewID();
 
     ComplaintUI cUI = new ComplaintUI(ID);
+    cUI.subjectField.setEditable(true);
+    cUI.descriptionArea.setEditable(true);
 
     JButton submitButton = new JButton("Submit");
 
