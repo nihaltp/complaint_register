@@ -64,7 +64,6 @@ public class UIUtils {
               panel.add(adminPanel, "admin");
               Retrieve.showComplaints(tableBody, username);
               cardLayout.show(panel, "admin");
-
               adminUI.logoutButton.addActionListener(
                   e -> {
                     logout();
@@ -109,6 +108,24 @@ public class UIUtils {
         b -> {
           backToDashboard(username);
         });
+    
+    // Add logic for the delete button
+    if (cUI.deleteButton != null) {
+      cUI.deleteButton.addActionListener(e -> {
+        // 1. Delete from database
+        Store.deleteComplaint(ID);
+
+        // 2. Refresh the dashboard view
+        tableBody.removeAll();
+        RowHelper.resetSlNo();
+        Retrieve.showComplaints(tableBody, username);
+        tableBody.revalidate();
+        tableBody.repaint();
+
+        // 3. Go back to the dashboard
+        backToDashboard(username);
+      });
+    }
   }
 
   /**
