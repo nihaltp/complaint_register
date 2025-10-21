@@ -1,76 +1,60 @@
 package ui;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.GridLayout;
+import java.awt.FlowLayout; 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 
 public class AdminDashboard {
-  JPanel panel;
-  JPanel header;
-  JPanel topPanel;
-  JPanel leftPanel;
-  JPanel rightPanel;
-  JPanel contentPanel;
-  JPanel tableHeader;
-  JPanel tableBody;
+    
+    public JPanel panel;
+    public JPanel tableBody;
+    public JButton logoutButton;
 
-  JScrollPane scrollPane;
+    
+    private JPanel leftPanel;
+    private JLabel adminNameLabel;
+    private JLabel loginTimeLabel;
 
-  JLabel adminNameLabel;
-  JLabel loginTimeLabel;
+    private Dashboard dashboard; 
 
-  JButton logoutButton;
+    public AdminDashboard() {
+        dashboard = new Dashboard(); 
 
-  public AdminDashboard() {
-    adminNameLabel = new JLabel("admin");
+        
+        this.panel = dashboard.getPanel();
+        this.tableBody = dashboard.getTableBody();
+        this.logoutButton = dashboard.getLogoutButton();
 
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-    loginTimeLabel = new JLabel();
-    loginTimeLabel.setText(LocalDateTime.now().format(formatter));
+        
+        adminNameLabel = new JLabel("admin");
 
-    leftPanel = new JPanel(new FlowLayout());
-    leftPanel.add(adminNameLabel);
-    leftPanel.add(loginTimeLabel);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+        loginTimeLabel = new JLabel();
+        loginTimeLabel.setText(LocalDateTime.now().format(formatter));
 
-    logoutButton = new JButton("LOGOUT");
+        
+        leftPanel = new JPanel(new FlowLayout(FlowLayout.LEFT)); 
+        leftPanel.add(adminNameLabel);
+        leftPanel.add(loginTimeLabel);
 
-    rightPanel = new JPanel(new FlowLayout());
-    rightPanel.add(logoutButton);
+        
+        dashboard.getTopPanel().add(leftPanel, BorderLayout.WEST);
+    }
 
-    topPanel = new JPanel(new BorderLayout());
-    topPanel.add(leftPanel, BorderLayout.WEST);
-    topPanel.add(rightPanel, BorderLayout.EAST);
+    
+    public JPanel getPanel() {
+        return panel;
+    }
 
-    tableHeader = new JPanel(new GridLayout(1, 4));
-    tableHeader.add(new JLabel("sl.no"));
-    tableHeader.add(new JLabel("Subject"));
-    tableHeader.add(new JLabel("Priority"));
-    tableHeader.add(new JLabel("ID"));
-    tableHeader.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
-    tableBody = new JPanel();
-    tableBody.setLayout(new BoxLayout(tableBody, BoxLayout.Y_AXIS));
+    public JPanel getTableBody() {
+        return tableBody;
+    }
 
-    scrollPane = new JScrollPane(tableBody);
-    scrollPane.setPreferredSize(new Dimension(480, 300));
-
-    header = new JPanel();
-    header.setLayout(new BorderLayout());
-    header.add(topPanel, BorderLayout.NORTH);
-    header.add(tableHeader, BorderLayout.SOUTH);
-
-    panel = new JPanel();
-    panel.setLayout(new BorderLayout());
-    panel.add(header, BorderLayout.NORTH);
-    panel.add(scrollPane, BorderLayout.CENTER);
-  }
+    public JButton getLogoutButton() {
+        return logoutButton;
+    }
 }

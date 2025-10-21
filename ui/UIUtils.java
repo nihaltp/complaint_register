@@ -65,6 +65,7 @@ public class UIUtils {
               panel.add(adminPanel, "admin");
               Retrieve.showComplaints(tableBody, username);
               cardLayout.show(panel, "admin");
+
               adminUI.logoutButton.addActionListener(
                   e -> {
                     logout();
@@ -140,6 +141,8 @@ public class UIUtils {
   public static void addComplaint() {
     int ID = Retrieve.getNewID();
     ComplaintUI cUI = new ComplaintUI(ID);
+    cUI.subjectField.setEditable(true);
+    cUI.descriptionArea.setEditable(true);
 
     JButton submitButton = new JButton("Submit");
     JCheckBox anonymousCheckBox = new JCheckBox("Post Anonymously");
@@ -151,6 +154,11 @@ public class UIUtils {
             subject = subject.substring("Subject: ".length());
           }
           String description = cUI.descriptionArea.getText();
+
+          if (subject.isEmpty() || description.isEmpty()) {
+            // You might want to show an error message here
+            return;
+          }
 
           Store.saveComplaint(
               username, subject, description, "", ID, anonymousCheckBox.isSelected());
