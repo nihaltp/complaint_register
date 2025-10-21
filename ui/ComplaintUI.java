@@ -77,12 +77,12 @@ public class ComplaintUI {
 
     // --- FIX: Use a JTextField for the single-line subject ---
     subjectField = new javax.swing.JTextField("Subject: " + subject);
-    subjectField.setEditable(!Auth.isAdmin(UIUtils.username));
+    subjectField.setEditable(false);
 
     descriptionArea = new JTextArea(description);
     descriptionArea.setLineWrap(true);
     descriptionArea.setWrapStyleWord(true);
-    descriptionArea.setEditable(!Auth.isAdmin(UIUtils.username));
+    descriptionArea.setEditable(false);
 
     descScroll = new JScrollPane(descriptionArea);
 
