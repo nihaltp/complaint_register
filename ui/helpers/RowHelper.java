@@ -15,6 +15,7 @@ import ui.UIUtils;
 
 public class RowHelper {
   private static int slNo = 1;
+  private static JPanel currentTableBody;
 
   /**
    * Adds a row to the table body
@@ -25,7 +26,9 @@ public class RowHelper {
    * @param ID the ID of the complaint
    */
   public static void addRow(JPanel tableBody, String subject, String priority, int ID) {
+    currentTableBody = tableBody; // Store reference
     JPanel row = new JPanel(new GridLayout(1, 4));
+    row.setName("row_" + ID); // Set a name
     row.setPreferredSize(new Dimension(0, 40));
     row.setMinimumSize(new Dimension(0, 40));
     row.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
@@ -35,12 +38,13 @@ public class RowHelper {
     row.add(new JLabel(subject));
 
     JLabel priorityLabel = new JLabel(priority);
+    priorityLabel.setName("priorityLabel");
     priorityLabel.setIcon(createCircleIcon(getPriorityColor(priority), 8));
     priorityLabel.setIconTextGap(8);
     row.add(priorityLabel);
 
     row.add(new JLabel("#" + Integer.toString(ID)));
-    row.setBorder(BorderFactory.createMatteBorder(1, 0, 1, 0, Color.BLACK));
+    row.setBorder(BorderFactory.createMatteBorder(1, 0, 1, 0, Color.LIGHT_GRAY));
 
     row.addMouseListener(
         new MouseAdapter() {
@@ -56,16 +60,20 @@ public class RowHelper {
   /** Resets the slNo to 1. This is used when the user switches after logout */
   public static void resetSlNo() {
     slNo = 1;
+    currentTableBody = null;
   }
 
   private static Color getPriorityColor(String priority) {
+    if (priority == null) {
+      priority = "new";
+    }
     return switch (priority.toLowerCase()) {
       case "resolved" -> Color.GRAY;
       case "high" -> Color.RED;
       case "medium" -> Color.ORANGE;
       case "low" -> Color.GREEN;
       case "new" -> Color.BLUE;
-      default -> Color.GRAY;
+      default -> Color.DARK_GRAY;
     };
   }
 
@@ -87,5 +95,35 @@ public class RowHelper {
         return size;
       }
     };
+  }
+
+  /**
+   * Updates the priority display of a specific row in the table body.
+   *
+   * @param ID the ID of the complaint row to update
+   * @param priority the new priority string
+   */
+  public static void update(int ID, String priority) {
+    if (currentTableBody == null) {
+      System.err.println("RowHelper.update: tableBody reference is null.");
+      return;
+    }
+
+    for (Component comp : currentTableBody.getComponents()) {
+      if (comp instanceof JPanel) {
+        JPanel row = (JPanel) comp;
+        if (("row_" + ID).equals(row.getName())) {
+          for (Component rowComp : row.getComponents()) {
+            if (rowComp instanceof JLabel && "priorityLabel".equals(rowComp.getName())) {
+              JLabel priorityLabel = (JLabel) rowComp;
+              priorityLabel.setText(priority);
+              priorityLabel.setIcon(createCircleIcon(getPriorityColor(priority), 8));
+              break;
+            }
+          }
+          break;
+        }
+      }
+    }
   }
 }
