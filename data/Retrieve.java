@@ -94,7 +94,7 @@ public class Retrieve {
     String description = "";
     String complainer = "";
 
-    String sql = "SELECT priority, subject, description, submitted_by FROM complaints WHERE id = ?";
+    String sql = "SELECT priority, subject, description, username FROM complaints WHERE id = ?";
 
     try (Connection conn = DBconnection.getConnection();
         PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -105,16 +105,29 @@ public class Retrieve {
           priority = rs.getString("priority");
           subject = rs.getString("subject");
           description = rs.getString("description");
-          complainer = rs.getString("submitted_by");
+          complainer = rs.getString("username");
         } else {
           System.err.println("No complaint found with ID: " + ID);
         }
+      } catch (SQLException e) {
+        System.err.println("No complaint found with ID: " + ID);
+        e.printStackTrace();
       }
     } catch (SQLException e) {
+      System.err.println("Error retrieving complaint with ID: " + ID);
       e.printStackTrace();
-      // Handle exception as needed
     }
 
-    return List.of(priority, subject, description, complainer);
+    try {
+      return List.of(priority, subject, description, complainer);
+    } catch (NullPointerException e) {
+      return List.of(
+          (priority != null && !priority.isEmpty()) ? priority : "",
+          (subject != null && !subject.isEmpty()) ? subject : "",
+          (description != null && !description.isEmpty()) ? description : "",
+          (complainer != null && !complainer.isEmpty()) ? complainer : "");
+    } catch (Exception e) {
+      return List.of("Error", "Error", "Error", "Error");
+    }
   }
 }
