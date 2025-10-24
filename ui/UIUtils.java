@@ -19,11 +19,8 @@ public class UIUtils {
   LoginUI loginUI;
   JPanel loginPanel;
 
-  AdminDashboard adminUI;
-  JPanel adminPanel;
-
-  UserDashboard userUI;
-  JPanel userPanel;
+  Dashboard UI;
+  JPanel UIpanel;
 
   static String username;
 
@@ -58,15 +55,14 @@ public class UIUtils {
             String status = login.check(username, password);
             if (status.equals("admin")) {
               // --- ADMIN LOGIN ---
-              adminUI = new AdminDashboard();
-              adminPanel = adminUI.getPanel();
-              tableBody = adminUI.getTableBody();
-              panel.add(adminPanel, "admin");
+              UI = new AdminDashboard();
+              UIpanel = UI.getPanel();
+              tableBody = UI.getTableBody();
+              panel.add(UIpanel, "admin");
               Retrieve.showComplaints(tableBody, username);
               cardLayout.show(panel, "admin");
 
-              adminUI
-                  .getLogoutButton()
+              UI.getLogoutButton()
                   .addActionListener(
                       e -> {
                         logout();
@@ -74,15 +70,14 @@ public class UIUtils {
 
             } else if (status.equals("user")) {
               // --- NORMAL USER LOGIN ---
-              userUI = new UserDashboard(username);
-              userPanel = userUI.getPanel();
-              tableBody = userUI.getTableBody();
-              panel.add(userPanel, "user");
+              UI = new UserDashboard(username);
+              UIpanel = UI.getPanel();
+              tableBody = UI.getTableBody();
+              panel.add(UIpanel, "user");
               Retrieve.showComplaints(tableBody, username);
               cardLayout.show(panel, "user");
 
-              userUI
-                  .getLogoutButton()
+              UI.getLogoutButton()
                   .addActionListener(
                       e -> {
                         logout();

@@ -2,67 +2,39 @@ package ui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.FlowLayout; 
+import java.awt.FlowLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-public class UserDashboard {
-    public JPanel panel;
-    public JPanel tableBody;
-    public JButton logoutButton;
+public class UserDashboard extends Dashboard {
+  private JPanel topLeftPanel;
+  private JLabel userNameLabel;
+  private JButton addComplaintButton;
 
-    private JPanel topLeftPanel; 
-    private JLabel userNameLabel;
-    private JButton addComplaintButton;
+  public UserDashboard(String username) {
+    super();
 
-    private Dashboard dashboard; 
+    userNameLabel = new JLabel(username);
 
-    public UserDashboard(String username) {
-        dashboard = new Dashboard(); 
+    addComplaintButton = new JButton("Add a new Complaint");
 
-        
-        this.panel = dashboard.getPanel();
-        this.tableBody = dashboard.getTableBody();
-        this.logoutButton = dashboard.getLogoutButton();
+    addComplaintButton.setPreferredSize(new Dimension(180, 25));
+    addComplaintButton.setMaximumSize(new Dimension(180, 25));
 
-        
-        userNameLabel = new JLabel(username);
+    addComplaintButton.addActionListener(
+        e -> {
+          UIUtils.addComplaint();
+        });
 
-        addComplaintButton = new JButton("Add a new Complaint");
-        
-        addComplaintButton.setPreferredSize(new Dimension(180, 25)); 
-        addComplaintButton.setMaximumSize(new Dimension(180, 25));
+    topLeftPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+    topLeftPanel.add(userNameLabel);
+    topLeftPanel.add(addComplaintButton);
 
-        addComplaintButton.addActionListener(
-                e -> {
-                    UIUtils.addComplaint();
-                });
+    topPanel.add(topLeftPanel, BorderLayout.WEST);
+  }
 
-        
-        topLeftPanel = new JPanel(new FlowLayout(FlowLayout.LEFT)); 
-        topLeftPanel.add(userNameLabel);
-        topLeftPanel.add(addComplaintButton);
-
-        
-        dashboard.getTopPanel().add(topLeftPanel, BorderLayout.WEST);
-    }
-
-    
-    public JPanel getPanel() {
-        return panel;
-    }
-
-    public JPanel getTableBody() {
-        return tableBody;
-    }
-
-    public JButton getLogoutButton() {
-        return logoutButton;
-    }
-
-    
-    public JButton getAddComplaintButton() {
-        return addComplaintButton;
-    }
+  public JButton getAddComplaintButton() {
+    return addComplaintButton;
+  }
 }

@@ -1,14 +1,15 @@
 package ui.helpers;
 
+import static ui.helpers.PriorityHelper.createCircleIcon;
+import static ui.helpers.PriorityHelper.getPriorityColor;
+
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.BorderFactory;
-import javax.swing.Icon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import ui.UIUtils;
@@ -61,40 +62,6 @@ public class RowHelper {
   public static void resetSlNo() {
     slNo = 1;
     currentTableBody = null;
-  }
-
-  private static Color getPriorityColor(String priority) {
-    if (priority == null) {
-      priority = "new";
-    }
-    return switch (priority.toLowerCase()) {
-      case "resolved" -> Color.GRAY;
-      case "high" -> Color.RED;
-      case "medium" -> Color.ORANGE;
-      case "low" -> Color.GREEN;
-      case "new" -> Color.BLUE;
-      default -> Color.DARK_GRAY;
-    };
-  }
-
-  private static Icon createCircleIcon(Color color, int size) {
-    return new Icon() {
-      @Override
-      public void paintIcon(Component c, Graphics g, int x, int y) {
-        g.setColor(color);
-        g.fillOval(x, y, size, size);
-      }
-
-      @Override
-      public int getIconWidth() {
-        return size;
-      }
-
-      @Override
-      public int getIconHeight() {
-        return size;
-      }
-    };
   }
 
   /**
