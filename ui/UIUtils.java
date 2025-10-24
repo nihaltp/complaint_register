@@ -11,18 +11,18 @@ import javax.swing.JPanel;
 import ui.helpers.RowHelper;
 
 public class UIUtils {
-  JFrame frame;
-  static CardLayout cardLayout;
-  static JPanel panel;
-  static JPanel tableBody;
+  private JFrame frame;
+  private static CardLayout cardLayout;
+  private static JPanel panel;
+  private static JPanel tableBody;
 
-  LoginUI loginUI;
-  JPanel loginPanel;
+  private LoginUI loginUI;
+  private JPanel loginPanel;
 
-  Dashboard UI;
-  JPanel UIpanel;
+  private Dashboard UI;
+  private JPanel UIpanel;
 
-  static String username;
+  private static String username;
 
   public UIUtils() {
     // 1. Initialize the main frame and panels
@@ -37,60 +37,68 @@ public class UIUtils {
 
     // 2. Setup the Login Screen
     loginUI = new LoginUI();
-    loginPanel = loginUI.panel;
+    loginPanel = loginUI.getPanel();
     panel.add(loginPanel, "login"); // Add login panel to the card layout
 
     // 3. Add the logic for the login button
-    loginUI.loginButton.addActionListener(
-        a -> {
-          try {
-            username = loginUI.getUsername();
-            String password = loginUI.getPassword();
+    loginUI
+        .getLoginButton()
+        .addActionListener(
+            a -> {
+              try {
+                username = loginUI.getUsername();
+                String password = loginUI.getPassword();
 
-            if (username.isEmpty() || password.isEmpty()) {
-              loginUI.showError("Empty username or password.");
-              return;
-            }
+                if (username.isEmpty() || password.isEmpty()) {
+                  loginUI.showError("Empty username or password.");
+                  return;
+                }
 
-            String status = login.check(username, password);
-            if (status.equals("admin")) {
-              // --- ADMIN LOGIN ---
-              UI = new AdminDashboard();
-              UIpanel = UI.getPanel();
-              tableBody = UI.getTableBody();
-              panel.add(UIpanel, "admin");
-              Retrieve.showComplaints(tableBody, username);
-              cardLayout.show(panel, "admin");
+                try {
+                  String status = login.check(username, password);
+                  if (status.equals("admin")) {
+                    // --- ADMIN LOGIN ---
+                    UI = new AdminDashboard();
+                    UIpanel = UI.getPanel();
+                    tableBody = UI.getTableBody();
+                    panel.add(UIpanel, "admin");
+                    Retrieve.showComplaints(tableBody, username);
+                    cardLayout.show(panel, "admin");
 
-              UI.getLogoutButton()
-                  .addActionListener(
-                      e -> {
-                        logout();
-                      });
+                    UI.getLogoutButton()
+                        .addActionListener(
+                            e -> {
+                              logout();
+                            });
 
-            } else if (status.equals("user")) {
-              // --- NORMAL USER LOGIN ---
-              UI = new UserDashboard(username);
-              UIpanel = UI.getPanel();
-              tableBody = UI.getTableBody();
-              panel.add(UIpanel, "user");
-              Retrieve.showComplaints(tableBody, username);
-              cardLayout.show(panel, "user");
+                  } else if (status.equals("user")) {
+                    // --- NORMAL USER LOGIN ---
+                    UI = new UserDashboard(username);
+                    UIpanel = UI.getPanel();
+                    tableBody = UI.getTableBody();
+                    panel.add(UIpanel, "user");
+                    Retrieve.showComplaints(tableBody, username);
+                    cardLayout.show(panel, "user");
 
-              UI.getLogoutButton()
-                  .addActionListener(
-                      e -> {
-                        logout();
-                      });
-            } else {
-              loginUI.showError("Invalid username or password.");
-            }
-          } catch (Exception ex) {
-            loginUI.showError("An error occurred during login.");
-            System.err.println("An error occurred during login:");
-            ex.printStackTrace();
-          }
-        });
+                    UI.getLogoutButton()
+                        .addActionListener(
+                            e -> {
+                              logout();
+                            });
+                  } else {
+                    loginUI.showError("Invalid username or password.");
+                  }
+                } catch (Exception e) {
+                  loginUI.showError("Error logging in.");
+                  System.err.println("Error logging in:");
+                  e.printStackTrace();
+                }
+              } catch (Exception ex) {
+                loginUI.showError("An error occurred during login.");
+                System.err.println("An error occurred during login:");
+                ex.printStackTrace();
+              }
+            });
   }
 
   // This method starts the UI
@@ -101,32 +109,34 @@ public class UIUtils {
   // This method can be called from other parts of the app to show a specific complaint
   public static void showComplaint(int ID) {
     ComplaintUI cUI = new ComplaintUI(ID);
-    JPanel cPanel = cUI.complaintUI;
+    JPanel cPanel = cUI.getComplaintUI();
     panel.add(cPanel, "complaint");
     cardLayout.show(panel, "complaint");
 
-    cUI.backButton.addActionListener(
-        b -> {
-          backToDashboard(username);
-        });
+    cUI.getBackButton()
+        .addActionListener(
+            b -> {
+              backToDashboard(username);
+            });
 
     // Add logic for the delete button
-    if (cUI.deleteButton != null) {
-      cUI.deleteButton.addActionListener(
-          e -> {
-            // 1. Delete from database
-            Store.deleteComplaint(ID);
+    if (cUI.getDeleteButton() != null) {
+      cUI.getDeleteButton()
+          .addActionListener(
+              e -> {
+                // 1. Delete from database
+                Store.deleteComplaint(ID);
 
-            // 2. Refresh the dashboard view
-            tableBody.removeAll();
-            RowHelper.resetSlNo();
-            Retrieve.showComplaints(tableBody, username);
-            tableBody.revalidate();
-            tableBody.repaint();
+                // 2. Refresh the dashboard view
+                tableBody.removeAll();
+                RowHelper.resetSlNo();
+                Retrieve.showComplaints(tableBody, username);
+                tableBody.revalidate();
+                tableBody.repaint();
 
-            // 3. Go back to the dashboard
-            backToDashboard(username);
-          });
+                // 3. Go back to the dashboard
+                backToDashboard(username);
+              });
     }
   }
 
@@ -141,35 +151,37 @@ public class UIUtils {
     int ID = Retrieve.getNewID();
 
     ComplaintUI cUI = new ComplaintUI(ID);
-    cUI.subjectField.setEditable(true);
-    cUI.descriptionArea.setEditable(true);
+    cUI.subjectEditable(true);
+    cUI.descriptionEditable(true);
 
     JButton submitButton = new JButton("Submit");
-    cUI.anonymousButton.setVisible(true); // Show the anonymous button
+    cUI.anonymousButtonVisible(true); // Show the anonymous button
 
     submitButton.addActionListener(
         e -> {
           submit(false, ID, cUI);
         });
 
-    cUI.anonymousButton.addActionListener(
-        e -> {
-          submit(true, ID, cUI);
-        });
+    cUI.getAnonymousButton()
+        .addActionListener(
+            e -> {
+              submit(true, ID, cUI);
+            });
 
-    cUI.bottomPanel.remove(cUI.timeLabel);
-    cUI.bottomPanel.remove(cUI.complainerLabel);
-    cUI.bottomPanel.add(submitButton);
-    cUI.bottomPanel.add(cUI.anonymousButton); // Add anonymous button to the panel
+    cUI.getBottomPanel().remove(cUI.getTimeLabel());
+    cUI.getBottomPanel().remove(cUI.getComplainerLabel());
+    cUI.getBottomPanel().add(submitButton);
+    cUI.getBottomPanel().add(cUI.getAnonymousButton()); // Add anonymous button to the panel
 
-    JPanel cPanel = cUI.complaintUI;
+    JPanel cPanel = cUI.getComplaintUI();
     panel.add(cPanel, "complaint");
     cardLayout.show(panel, "complaint");
 
-    cUI.backButton.addActionListener(
-        _ -> {
-          backToDashboard(username);
-        });
+    cUI.getBackButton()
+        .addActionListener(
+            _ -> {
+              backToDashboard(username);
+            });
   }
 
   public static void backToDashboard(String currentUser) {
@@ -191,11 +203,11 @@ public class UIUtils {
   }
 
   public static void submit(boolean isAnon, int ID, ComplaintUI UI) {
-    String subject = UI.subjectField.getText();
+    String subject = UI.getSubjectField().getText();
     if (subject.startsWith("Subject: ")) {
       subject = subject.substring("Subject: ".length());
     }
-    String description = UI.descriptionArea.getText();
+    String description = UI.getDescriptionArea().getText();
     if (subject == "" || description == "") {
       return;
     }

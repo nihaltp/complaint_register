@@ -16,18 +16,18 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 public class LoginUI {
-  JPanel panel;
-  JPanel usernamePanel;
-  JPanel passwordPanel;
-  JPanel loginPanel;
+  private JPanel panel;
+  private JPanel usernamePanel;
+  private JPanel passwordPanel;
+  private JPanel loginPanel;
 
-  JLabel usernameLabel;
-  JLabel passwordLabel;
-  JLabel errorLabel; // Add this line
+  private JLabel usernameLabel;
+  private JLabel passwordLabel;
+  private JLabel errorLabel;
 
   private JTextField usernameField;
   private JPasswordField password;
-  JButton loginButton;
+  private JButton loginButton;
 
   private static final String USERNAME_PLACEHOLDER = "Enter your username";
   private static final String PASSWORD_PLACEHOLDER = "Enter your password";
@@ -56,8 +56,8 @@ public class LoginUI {
 
     passwordPanel.add(passwordLabel);
     passwordPanel.add(password);
-    
-    // Create and add the error label
+
+    // Create error label
     errorLabel = new JLabel(" ");
     errorLabel.setForeground(Color.RED);
     JPanel errorPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
@@ -121,17 +121,17 @@ public class LoginUI {
   public void showError(String message) {
     errorLabel.setText(message);
   }
-  
+
   // Method to clear the error message
   public void clearError() {
-      errorLabel.setText(" ");
+    errorLabel.setText(" ");
   }
 
   /**
    * Retrieves the username from the login form, ignoring the placeholder.
    *
    * @return The username entered by the user, or an empty string if the user did not enter a
-   * username.
+   *     username.
    */
   public String getUsername() {
     String username = usernameField.getText();
@@ -145,7 +145,7 @@ public class LoginUI {
    * Retrieves the password from the login form, ignoring the placeholder.
    *
    * @return The password entered by the user, or an empty string if the user did not enter a
-   * password.
+   *     password.
    */
   public String getPassword() {
     String pwd = new String(password.getPassword());
@@ -168,5 +168,23 @@ public class LoginUI {
     if (password instanceof JPasswordField) {
       ((JPasswordField) password).setEchoChar((char) 0);
     }
+  }
+
+/**
+ * Returns the main panel of the login form, which contains all the UI elements for entering the username and password.
+ *
+ * @return The main panel of the login form.
+ */
+  public JPanel getPanel() {
+    return panel;
+  }
+
+/**
+ * Provides access to the login button.
+ *
+ * @return The JButton used to log in to the system.
+ */
+  public JButton getLoginButton() {
+    return loginButton;
   }
 }

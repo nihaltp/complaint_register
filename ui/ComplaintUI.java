@@ -18,28 +18,28 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 public class ComplaintUI {
-  JPanel complaintUI;
-  JPanel topPanel;
-  JPanel bottomPanel;
+  private JPanel complaintUI;
+  private JPanel topPanel;
+  private JPanel bottomPanel;
 
-  JButton backButton;
-  JButton editButton;
-  JButton saveButton;
-  JButton deleteButton;
-  JButton anonymousButton; // Add this
+  private JButton backButton;
+  private JButton editButton;
+  private JButton saveButton;
+  private JButton deleteButton;
+  private JButton anonymousButton;
 
-  JComboBox<String> priorityBox;
+  private JComboBox<String> priorityBox;
 
-  JLabel idLabel;
-  JLabel timeLabel;
-  JLabel complainerLabel;
+  private JLabel idLabel;
+  private JLabel timeLabel;
+  private JLabel complainerLabel;
 
-  JTextField subjectField;
-  JTextArea descriptionArea;
+  private JTextField subjectField;
+  private JTextArea descriptionArea;
 
-  JScrollPane descScroll;
+  private JScrollPane descScroll;
 
-  String complainer;
+  private String complainer;
 
   public ComplaintUI(int ID) {
     String priority, subject, description;
@@ -86,7 +86,7 @@ public class ComplaintUI {
     topPanel = new JPanel(new BorderLayout());
     topPanel.add(backButton, BorderLayout.WEST);
 
-    if (Auth.isAdmin(UIUtils.username)) {
+    if (Auth.isAdmin(UIUtils.getUsername())) {
       priorityBox = new JComboBox<>(new String[] {"new", "low", "medium", "high", "resolved"});
       priorityBox.setSelectedItem(priority);
       priorityBox.addActionListener(
@@ -111,7 +111,7 @@ public class ComplaintUI {
     bottomPanel.add(complainerLabel);
 
     // Add Edit and Save buttons for the user who created the complaint
-    if (!Auth.isAdmin(UIUtils.username) && UIUtils.username.equals(complainer)) {
+    if (!Auth.isAdmin(UIUtils.getUsername()) && UIUtils.getUsername().equals(complainer)) {
       bottomPanel.add(Box.createRigidArea(new Dimension(10, 0)));
       bottomPanel.add(editButton);
       bottomPanel.add(saveButton);
@@ -149,5 +149,114 @@ public class ComplaintUI {
 
     complaintUI.add(centerContent, BorderLayout.CENTER);
     complaintUI.add(bottomPanel, BorderLayout.SOUTH);
+  }
+
+
+/**
+ * Returns the main panel of the ComplaintUI class, which contains the
+ * UI elements for displaying and editing a complaint.
+ *
+ * @return JPanel complaintUI
+ */
+  public JPanel getComplaintUI() {
+    return complaintUI;
+  }
+
+/**
+ * Returns the JButton for submitting the complaint anonymously.
+ * @return JButton anonymousButton 
+ */
+  public JButton getAnonymousButton() {
+    return anonymousButton;
+  }
+
+/**
+ * Returns the JPanel containing the back, edit, save, and delete buttons.
+ *
+ * @return JPanel bottomPanel
+ */
+  public JPanel getBottomPanel() {
+    return bottomPanel;
+  }
+
+/**
+ * Returns the JButton for going back to the dashboard.
+ * @return JButton backButton
+ */
+  public JButton getBackButton() {
+    return backButton;
+  }
+
+/**
+ * Returns the JButton for deleting the complaint.
+ * @return JButton deleteButton
+ */
+  public JButton getDeleteButton() {
+    return deleteButton;
+  }
+
+/**
+ * Returns the JLabel that displays the time when the complaint was submitted.
+ *
+ * @return JLabel timeLabel
+ */
+  public JLabel getTimeLabel() {
+    return timeLabel;
+  }
+
+/**
+ * Returns the JLabel that displays the name of the user who submitted the complaint.
+ *
+ * @return JLabel complainerLabel
+ */
+  public JLabel getComplainerLabel() {
+    return complainerLabel;
+  }
+
+/**
+ * Returns the JTextField that contains the subject of the complaint.
+ * This is used to edit the subject of the complaint.
+ *
+ * @return JTextField subjectField
+ */
+  public JTextField getSubjectField() {
+    return subjectField;
+  }
+
+/**
+ * Returns the JTextArea that contains the description of the complaint.
+ * This is used to edit the description of the complaint.
+ * @return JTextArea descriptionArea
+ */
+  public JTextArea getDescriptionArea() {
+    return descriptionArea;
+  }
+
+
+/**
+ * Sets the editability of the subject field.
+ *
+ * @param editable true if the subject field should be editable, false otherwise
+ */
+  public void subjectEditable(boolean editable) {
+    subjectField.setEditable(editable);
+  }
+
+/**
+ * Sets the editability of the description area.
+ *
+ * @param editable true if the description area should be editable, false otherwise
+ */
+  public void descriptionEditable(boolean editable) {
+    descriptionArea.setEditable(editable);
+  }
+
+/**
+ * Sets the visibility of the anonymous button.
+ *
+ * @param visible true if the anonymous button should be visible, false otherwise
+ */
+  public void anonymousButtonVisible(boolean visible) {
+    anonymousButton.setVisible(visible);
   }
 }
